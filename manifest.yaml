@@ -1,0 +1,21 @@
+specVersion: "1"
+id: lax-455465
+leanVersion: "v4.33.0"
+mathlibVersion: "db584cd6d46c92f209a44c0f1c829460d327499d"
+title: "Multicommodity Flow–Cut Theorems of Leighton and Rao"
+authors:
+  - name: Édouard Bonnet and Codex 6
+    github: EdouardBonnet
+bibEntries:
+  - |
+    @article{LeightonRao1999,
+      author = {Leighton, Tom and Rao, Satish},
+      title = {Multicommodity Max-Flow Min-Cut Theorems and Their Use in Designing Approximation Algorithms},
+      journal = {Journal of the ACM},
+      volume = {46},
+      number = {6},
+      pages = {787--832},
+      year = {1999},
+      doi = {10.1145/331524.331526},
+      url = {https://doi.org/10.1145/331524.331526}
+    }
