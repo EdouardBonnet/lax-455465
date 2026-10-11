@@ -146,8 +146,16 @@ command. For inputs with at least two positive weights it obtains the actual
 matching primal and dual witnesses, in canonical unsigned rational buffers.
 The interpreter preserves the source graph, dimensions, and edge model.
 
-The ordinary algorithm still needs malformed-input guards, native metric
-rounding, its remaining resource bounds, and final composition. The separate
+The native shortest-distance command now performs all runtime Floyd–Warshall
+pivots and exactly matches the mathematical min-plus algorithm. A common
+denominator invariant bounds every intermediate matrix and normalized
+addition candidate. The actual returned LP certificate supplies the initial
+coordinate bounds, giving polynomial distance bit heights in the original
+graph input size.
+
+The ordinary algorithm still needs malformed-input guards, initialization
+and composition of native distances with LP decoding, native region growth
+and cut rounding, their remaining resource bounds, and final composition. The separate
 short-path construction is open.
 
 ## Conventions and dependencies
@@ -195,9 +203,11 @@ bash scripts/check-ram.sh
 ```
 
 The compiled RAM checks run from standard zero memory and verify exact
-certificate-coordinate conversion, zero dimensions, large rational words,
-and termination within the stated fuel. Each check lists its physical input
-and expected output in `checks/CertificateDecode.lean`. The harness compiles
+certificate-coordinate conversion, min-plus updates, full Floyd–Warshall
+execution, zero dimensions, large rational words, and termination within the
+stated fuel. Each check lists its physical input and expected output in
+`checks/CertificateDecode.lean`, `checks/MinPlus.lean`, or
+`checks/FloydWarshall.lean`. The harness compiles
 the native command to the registered word RAM; it does not substitute a host
 implementation of the decoder.
 

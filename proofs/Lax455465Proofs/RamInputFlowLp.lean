@@ -6,7 +6,7 @@ namespace Lax455465Proofs.RamInputFlowLp
 
 open Lax808846Proofs.Imp Lax808846Proofs.Reasoning RamVirtualState RamFlowData DirectedFlowLP
 open Lax455465.RationalEncoding Lax455465.ProductNetwork Lax109476.RationalCertificates
-open Lax759944.BinaryWordEncoding
+open Lax759944.BinaryWordEncoding Lax759944.RamPolytime
 open scoped NNRat
 
 theorem input_length {n : ℕ} (kind : EdgeKind) (I : RationalInstance n) :
@@ -20,10 +20,12 @@ theorem input_length {n : ℕ} (kind : EdgeKind) (I : RationalInstance n) :
 exact flow LP, and obtains a valid certificate from the registered solver.
 No graph dimensions, coefficients, or certificate coordinates are preloaded. -/
 theorem exists_program :
-    ∃ (c : Com) (timeBound wordBound sourceTime : Polynomial ℕ),
+    ∃ (c : Com) (timeBound wordBound sourceTime sourceWord : Polynomial ℕ),
       ∀ {n : ℕ} (kind : EdgeKind) (I : RationalInstance n),
         ∃ certificate : Certificate (rows n) (columns n),
           IsValidCertificate (program I) certificate ∧
+          FitsInWords (sourceWord.eval (bitSize (Lax109476.RationalEncoding.encodeProgram (program I))))
+            (Lax109476.RationalEncoding.encodeCertificate certificate) ∧
           ∀ W : ℕ, wordBound.eval (bitSize (encodeInput kind I)) ≤ W →
             Spec (2^W) (fun σ => σ.inp = (encodeInput kind I).length :: encodeInput kind I ∧
               (encodeInput kind I).length ≤ (σ.arrs "input.data").length ∧
@@ -38,13 +40,13 @@ theorem exists_program :
                 Prefix (Lax109476.RationalEncoding.encodeCertificate certificate) "vm.output" τ ∧
                 τ.vars "vm.outputLength" = (Lax109476.RationalEncoding.encodeCertificate certificate).length ∧
                 τ.vars "vm.running" = 0) (timeBound.eval (bitSize (encodeInput kind I))) := by
-  obtain ⟨c,T,WB,TB,hsolver⟩ := RamUniformFlowLp.exists_program
+  obtain ⟨c,T,WB,TB,sourceWord,hsolver⟩ := RamUniformFlowLp.exists_program
   let parsing : Polynomial ℕ := Polynomial.C 200*(Polynomial.X+Polynomial.C 1)^2
   let words : Polynomial ℕ := WB+LpInputSize.sizeBound+Polynomial.X+Polynomial.C 10
-  refine ⟨.seq RamInputCopy.copy (.seq RamGraphInput.command c),T+parsing,words,TB,?_⟩
+  refine ⟨.seq RamInputCopy.copy (.seq RamGraphInput.command c),T+parsing,words,TB,sourceWord,?_⟩
   intro n kind I
-  obtain ⟨certificate,hvalid,hcorrect⟩ := hsolver kind I
-  refine ⟨certificate,hvalid,?_⟩
+  obtain ⟨certificate,hvalid,hfit,hcorrect⟩ := hsolver kind I
+  refine ⟨certificate,hvalid,hfit,?_⟩
   intro W hW
   let L := bitSize (encodeInput kind I)
   let S := LpInputSize.sizeBound.eval L

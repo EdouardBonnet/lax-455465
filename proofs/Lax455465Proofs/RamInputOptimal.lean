@@ -6,17 +6,19 @@ namespace Lax455465Proofs.RamInputOptimal
 open Lax808846Proofs.Imp Lax808846Proofs.Reasoning RamVirtualState RamFlowData DirectedFlowLP
 open Lax455465.RationalEncoding Lax455465.ProductNetwork
 open Lax109476.LinearProgram Lax109476.RationalCertificates
-open Lax759944.BinaryWordEncoding
+open Lax759944.BinaryWordEncoding Lax759944.RamPolytime
 open scoped NNRat
 
 /-- A single native command obtains and decodes the actual optimal pair.
 Its only initialized mathematical input is the physical graph tape. -/
 theorem exists_program :
-    ∃ (c : Com) (timeBound wordBound sourceTime : Polynomial ℕ),
+    ∃ (c : Com) (timeBound wordBound sourceTime sourceWord : Polynomial ℕ),
       ∀ {n : ℕ} (kind : EdgeKind) (I : RationalInstance n), 2 ≤ supportCount I.weights →
         ∃ (z : Fin (columns n) → ℚ) (y : Fin (rows n) → ℚ)
           (hz : PrimalFeasible (program I) z) (hy : DualFeasible (program I) y),
           primalValue (program I) z = dualValue (program I) y ∧
+          FitsInWords (sourceWord.eval (bitSize (Lax109476.RationalEncoding.encodeProgram (program I))))
+            (Lax109476.RationalEncoding.encodeCertificate (.optimal z y)) ∧
           ∀ W : ℕ, wordBound.eval (bitSize (encodeInput kind I)) ≤ W →
             Spec (2^W) (fun σ => σ.inp = (encodeInput kind I).length :: encodeInput kind I ∧
               (encodeInput kind I).length ≤ (σ.arrs "input.data").length ∧
@@ -33,15 +35,15 @@ theorem exists_program :
                 Prefix (Lax109476.RationalEncoding.encodeCertificate (.optimal z y)) "vm.output" τ ∧
                 τ.vars "cert.cursor" = 1+3*columns n+3*rows n)
               (timeBound.eval (bitSize (encodeInput kind I))) := by
-  obtain ⟨c,T,WB,TB,hsolver⟩ := RamInputFlowLp.exists_program
+  obtain ⟨c,T,WB,TB,sourceWord,hsolver⟩ := RamInputFlowLp.exists_program
   let extra : Polynomial ℕ := Polynomial.C 39*LpInputSize.sizeBound+Polynomial.C 22
   let words : Polynomial ℕ := WB+LpInputSize.sizeBound+Polynomial.C 10
-  refine ⟨.seq c RamOptimalDecode.command,T+extra,words,TB,?_⟩
+  refine ⟨.seq c RamOptimalDecode.command,T+extra,words,TB,sourceWord,?_⟩
   intro n kind I hp
-  obtain ⟨certificate,hvalid,hcorrect⟩ := hsolver kind I
+  obtain ⟨certificate,hvalid,hfit,hcorrect⟩ := hsolver kind I
   obtain ⟨z,y,hcertificate,hz,hy,hvalue⟩ := FlowOptimalCertificate.optimal I hp certificate hvalid
   subst certificate
-  refine ⟨z,y,hz,hy,hvalue,?_⟩
+  refine ⟨z,y,hz,hy,hvalue,hfit,?_⟩
   intro W hW
   let L := bitSize (encodeInput kind I)
   let S := LpInputSize.sizeBound.eval L

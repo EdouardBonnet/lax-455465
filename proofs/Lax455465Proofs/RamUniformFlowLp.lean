@@ -12,10 +12,12 @@ open scoped NNRat
 instruction and word bounds, chosen before all input dimensions and data.
 Reserved array extents are proof bookkeeping, not initialized oracle data. -/
 theorem exists_program :
-    ∃ (c : Com) (timeBound wordBound sourceTime : Polynomial ℕ),
+    ∃ (c : Com) (timeBound wordBound sourceTime sourceWord : Polynomial ℕ),
       ∀ {n : ℕ} (kind : Lax455465.ProductNetwork.EdgeKind) (I : RationalInstance n),
         ∃ certificate : Certificate (rows n) (columns n),
           IsValidCertificate (program I) certificate ∧
+          FitsInWords (sourceWord.eval (bitSize (Lax109476.RationalEncoding.encodeProgram (program I))))
+            (Lax109476.RationalEncoding.encodeCertificate certificate) ∧
           ∀ W : ℕ, wordBound.eval (bitSize (encodeInput kind I)) ≤ W →
             Spec (2^W) (fun σ => Data I σ ∧ RamFlowLp.wordLength n < (σ.arrs "lp.word").length ∧
               (Lax109476.RationalEncoding.encodeProgram (program I)).length < (σ.arrs "vm.input").length ∧
@@ -29,10 +31,10 @@ theorem exists_program :
                 τ.vars "vm.running" = 0) (timeBound.eval (bitSize (encodeInput kind I))) := by
   obtain ⟨p,WB,TB,coefficients,hsolve⟩ := RamFlowLpSolver.exists_program
   refine ⟨RamFlowLpSolver.command p coefficients,RamFlowSolverBounds.timeBound p coefficients TB,
-    RamFlowHostWidth.wordBound p WB TB,TB,?_⟩
+    RamFlowHostWidth.wordBound p WB TB,TB,WB,?_⟩
   intro n kind I
   obtain ⟨certificate,hvalid,hfit,hcorrect⟩ := hsolve I
-  refine ⟨certificate,hvalid,?_⟩
+  refine ⟨certificate,hvalid,hfit,?_⟩
   intro W hW
   let L := bitSize (encodeInput kind I)
   let M := 2^L
