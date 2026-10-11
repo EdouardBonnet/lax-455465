@@ -4,7 +4,7 @@ leanVersion: "v4.33.0"
 mathlibVersion: "db584cd6d46c92f209a44c0f1c829460d327499d"
 title: "Multicommodity Flow–Cut Theorems of Leighton and Rao"
 authors:
-  - name: Édouard Bonnet and Codex 6
+  - name: Édouard Bonnet and Codex 6.1
     github: EdouardBonnet
 bibEntries:
   - |

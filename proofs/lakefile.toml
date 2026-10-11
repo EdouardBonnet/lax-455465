@@ -21,3 +21,11 @@ name = "Lax759944"
 git = "https://github.com/szymtor/RAM-TM"
 rev = "134e398cef46599371df99f10c9007bc34ba3868"
 subDir = "concepts"
+
+[[require]]
+name = "Lax109476"
+path = "../../linear-programming/concepts"
+
+[[require]]
+name = "Lax109476Proofs"
+path = "../../linear-programming/proofs"

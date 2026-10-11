@@ -1,88 +1,84 @@
-# Leighton–Rao flow–cut submission
+# Deterministic Leighton–Rao flow–cut algorithms
 
-Prepared submission `lax-455465`, based on Tom Leighton and Satish Rao,
+Submission `lax-455465`, based on Tom Leighton and Satish Rao,
 *Multicommodity Max-Flow Min-Cut Theorems and Their Use in Designing
 Approximation Algorithms*, JACM 46(6), 787–832 (1999),
 [doi:10.1145/331524.331526](https://doi.org/10.1145/331524.331526).
 
-The local reference PDF is `leighton-rao.pdf`. It is ignored by git and is
-not part of the Apache-licensed submission source.
+The reference PDF is `leighton-rao.pdf`, ignored by git.
 
-## Scope and proof status
+## Scope
 
-| Source | Concept | Status |
+The common algorithm handles rational product demands in directed and
+undirected networks. It returns a joint certificate consisting of a
+positive-demand cut and a feasible rational concurrent arc flow, with cut ratio
+at most a universal constant times log₂(p) times the returned flow value.
+Here p counts the positive-weight vertices. Four variants specialize this
+single algorithm and retain its program and exact output guarantees.
+
+The uniform short-path construction of Theorem 18 remains a separate
+algorithmic statement: its additional path-length bound does not follow
+from the ordinary flow–cut guarantee. Matching lower-bound examples,
+nonalgorithmic statements for arbitrary real inputs, and applications to
+other approximation problems are outside this submission.
+
+## Proof status
+
+| Statement | Status | Public proof dependency |
 | --- | --- | --- |
-| Section 1.2; upper bounds in Theorems 2, 7, 12, 17 | `CutBound` | Open |
-| Theorem 1 | `TightFlowCutGap` | Open |
-| Theorem 2 | `UniformFlowCut` | Proved assuming `ProductFlowCut` |
-| Section 2.3, Theorem 7 | `ProductFlowCut` | Open |
-| Theorem 12 | `DirectedUniformFlowCut` | Proved assuming `DirectedProductFlowCut` |
-| Theorem 17 | `DirectedProductFlowCut` | Open |
-| Theorem 18 | `UniformShortPathTheorem` | Open |
-| Sections 2.2–2.3 and 3.1: constructive sparse-cut guarantee | `RamUndirectedSparsestCut` | Open |
-| Sections 2.3–2.4 and 3.1: directed constructive guarantee | `RamDirectedSparsestCut` | Open |
-| Algorithmic construction accompanying Theorem 18 | `RamUniformShortPathFlow` | Open |
+| `RamProductFlowCut` | Open | — |
+| `RamDirectedSparsestCut` | Conditional proof | `RamProductFlowCut` |
+| `RamUndirectedSparsestCut` | Conditional proof | `RamProductFlowCut` |
+| `RamDirectedUniformFlowCut` | Conditional proof | `RamDirectedSparsestCut` |
+| `RamUniformFlowCut` | Conditional proof | `RamUndirectedSparsestCut` |
+| `RamUniformShortPathFlow` | Open | — |
 
-Definitions are organized into `ProductNetwork`, `ConcurrentFlow`,
-`ShortPathFlow`, and `RationalEncoding`. The submission covers the headline
-flow–cut results in Section 2 and their constructive cut guarantees. The
-separate applications in Section 3 and the unnumbered extensions of
-Theorem 18 to other demand models are outside this scope.
+These are six algorithmic statements and five definition concepts. The
+conditional proofs preserve one program, one universal approximation
+constant, and the same joint output. The core algorithm and short-path
+algorithm are not yet discharged from background axioms. No `sorry` or
+`admit` is used. Lax concept axioms represent the open statements.
 
-The proof network records exactly two conditional proofs: each uniform
-converse depends on its product counterpart. This is a specialization of
-the paper's statements; the paper itself develops the uniform case first.
-No substantive flow–cut theorem has been discharged from background axioms.
-Open statements are declared as Lax concept axioms, with no `sorry` proofs.
+The proof package's directed-flow LP uses n⁴+1 nonnegative variables and
+n²+2n³ inequalities. Its capacity and conservation constraints encode arc
+flows, without enumerating simple paths. Supporting proofs are internal
+lemmas, rather than independent public side observations. They prove exact
+LP equivalence, feasibility and boundedness, extraction of a rational flow
+and matching dual from the actual LP solver, dual lengths and potentials,
+and the directed-to-undirected conversion. The rational threshold-selection
+routine and its finite layer-cake rounding bound are also proved. Exact
+rational min-plus distances preserve the dual separation and cost bounds.
+Finite region-volume growth bounds are proved between vertex-distance events.
 
-## Mathematical conventions
+The ordinary algorithm still needs the region-growing construction with
+its logarithmic guarantee and the RAM implementation and composition of
+the reduction and rounding stages. The short-path construction is open.
 
-- Undirected edges share capacity between both directions. Each ordered
-  pair has half the unordered-pair demand, as in footnotes 2 and 7.
-- Directed arcs have separate capacities. Each ordered pair has full
-  product demand, as in Section 2.4. The directed demand matrix is symmetric;
-  its capacity matrix may be asymmetric.
-- Product bounds use the number `p` of positive-weight vertices and
-  `log₂ p`. The undirected paper's `log k` shorthand is not used at `p = 2`,
-  when there is only one unordered commodity. Zero-weight transit vertices
-  are permitted.
-- Sparsest cuts range only over cuts of positive demand. All flow–cut
-  statements require at least two positive-weight vertices; uniform
-  statements require `n ≥ 2`.
-- The short-path theorem requires positive sparsest-cut value and bounds
-  the number of edges on every path carrying positive flow.
-- The lower bound uses universal constants and an explicit asymptotic
-  threshold, with positive maximum flow to exclude trivial zero examples.
+## Conventions and dependencies
 
-## Existing RAM dependency
+Undirected capacities are symmetric and shared between both directions.
+Each ordered pair has half its unordered product demand. Directed arcs
+have separate capacities and full product demand for each ordered pair.
+Both models use cuts of positive demand only, require p ≥ 2, and allow
+zero-weight transit vertices. Uniform inputs have all weights equal to one.
 
-The algorithmic concepts use `Lax759944.RamPolytime.RamPolytime`, pinned to
-the registered RAM–Turing submission:
-
-```text
-https://github.com/szymtor/RAM-TM
-134e398cef46599371df99f10c9007bc34ba3868
-concepts
-```
-
-That predicate uses the registered word RAM `Lax808846`, pinned transitively
-to `https://github.com/lax-archive/lax-submissions` at
+The registered `Lax759944.RamPolytime.RamPolytime` predicate is pinned to
+`https://github.com/szymtor/RAM-TM`, commit
+`134e398cef46599371df99f10c9007bc34ba3868`, folder `concepts`. Its word RAM
+is `Lax808846`, pinned transitively to
+`https://github.com/lax-archive/lax-submissions`, commit
 `9394e531cc51cb67a0214bca3f9264dfe97ba5c7`, folder `word-ram/concepts`.
-Polynomial time is measured in the binary size of the rational input, with
-one uniform program and polynomial bounds on both sufficient word length
-and executed instructions. Each theorem requires exact encoded output.
 
-Input and certificate formats are documented in `RationalEncoding`. In
-particular, rational inputs retain their denominators; arithmetic on arbitrarily
-large input integers is not silently treated as constant-cost computation.
+The LP development `lax-109476` is reused as a local sibling while it is
+still a draft. It must be registered and the sibling requires replaced
+with its immutable git pins before strict archive submission. Local
+iteration therefore uses `lax build --nonstrict`; strict builds must not
+silently accept this draft dependency.
 
 ## Validation
 
 ```sh
-lax build /home/ebonnet/Bitbucket/lax/leighton-rao --replay
+lax build /home/ebonnet/Bitbucket/lax/leighton-rao --nonstrict --replay
 ```
 
-The repository is local. Publication and registration are separate steps.
-
-Validation on 2026-10-10: `lax build --replay` passed, inspecting 14 concepts
-and two conditional proofs. Both registered dependencies resolved successfully.
+Build artifacts use the existing shared mathlib and RAM dependencies.

@@ -11,8 +11,9 @@ Finite algorithms receive nonnegative rational capacities and vertex weights.
 Each rational is encoded by its reduced numerator and positive denominator.
 An instance contains its edge model, number of vertices, vertex weights in
 vertex order, and full capacity matrix in row order. A cut is encoded by
-its length-$n$ membership word. A fractional-flow certificate contains its
-claimed value and a list of paths with rational flow amounts.
+its length-$n$ membership word. An ordinary flow certificate contains its claimed value and the $n^4$
+commodity/arc amounts. A short-path certificate instead contains its value
+and a list of paths with rational flow amounts.
 
 # Formalization notes
 
@@ -86,5 +87,22 @@ def encodeFlow {n : ℕ} (certificate : FlowCertificate n) : List ℕ :=
   encodeRational certificate.value ++ [certificate.paths.length] ++
     certificate.paths.flatMap fun record =>
       [record.1.length] ++ record.1.map Fin.val ++ encodeRational record.2
+
+/-- A polynomial-size rational arc-flow certificate for the ordinary theorem. -/
+structure ArcCertificate (n : ℕ) where
+  /-- The common demand fraction. -/
+  value : ℚ≥0
+  /-- The amount assigned to each commodity and directed arc. -/
+  arcs : Fin n → Fin n → Fin n → Fin n → ℚ≥0
+
+/-- Exact real interpretation of rational commodity/arc amounts. -/
+def ArcCertificate.flow {n : ℕ} (certificate : ArcCertificate n) : ArcFlow n :=
+  fun s t u v => (certificate.arcs s t u v : ℝ≥0)
+
+/-- The value followed by all n⁴ arc coordinates in index order. -/
+def encodeArcs {n : ℕ} (certificate : ArcCertificate n) : List ℕ :=
+  encodeRational certificate.value ++
+    (List.ofFn fun s => List.ofFn fun t => List.ofFn fun u => List.ofFn fun v =>
+      encodeRational (certificate.arcs s t u v)).flatten.flatten.flatten.flatten
 
 end Lax455465.RationalEncoding

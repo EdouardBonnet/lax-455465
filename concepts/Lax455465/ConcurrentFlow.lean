@@ -7,7 +7,8 @@ import Mathlib.Data.List.Count
 title: Concurrent fractional flow
 type: definition
 ---
-A fractional flow assigns nonnegative amounts to finitely many simple paths.
+A fractional flow can be represented by nonnegative commodity/arc amounts
+or by nonnegative amounts on finitely many simple paths.
 It is feasible when the total load on every edge is at most its capacity.
 Undirected edges carry the sum of the loads in both directions; directed arcs
 carry only forward load. A concurrent flow of value $f$ meets $f$ times
@@ -15,6 +16,10 @@ every commodity's demand simultaneously. The maximum concurrent flow is the
 supremum of feasible values.
 
 # Formalization notes
+
+The ordinary algorithm uses arc amounts with exact supply and conservation,
+so its certificate has polynomially many coordinates. The short-path
+algorithm uses explicit path records to certify the lengths.
 
 A path is its ordered vertex list. Positive flow is supported only on lists
 with at least two vertices and no repeated vertex. Its commodity is determined
@@ -78,5 +83,33 @@ def IsConcurrentFlow {n : ℕ} (kind : EdgeKind) (N : Network n)
 noncomputable def maxFlow {n : ℕ} (kind : EdgeKind) (N : Network n)
     (π : VertexWeight n) : ℝ≥0 :=
   sSup {f | ∃ F : PathFlow n, IsConcurrentFlow kind N π f F}
+
+/-- An arc flow records a nonnegative amount for each commodity and arc. -/
+abbrev ArcFlow (n : ℕ) := Fin n → Fin n → Fin n → Fin n → ℝ≥0
+
+/-- Aggregate forward capacity consumption in the edge formulation. -/
+def totalArcLoad {n : ℕ} (F : ArcFlow n) (u v : Fin n) : ℝ≥0 :=
+  ∑ s, ∑ t, F s t u v
+
+/-- Shared or separate capacities in the edge formulation. -/
+def totalEdgeLoad {n : ℕ} (kind : EdgeKind) (F : ArcFlow n) (u v : Fin n) : ℝ≥0 :=
+  match kind with
+  | .undirected => totalArcLoad F u v + totalArcLoad F v u
+  | .directed => totalArcLoad F u v
+
+/-- Net required supply at a vertex for one commodity; diagonal commodities
+have zero supply at every vertex. -/
+noncomputable def requiredSupply {n : ℕ} (kind : EdgeKind) (π : VertexWeight n)
+    (f : ℝ≥0) (s t u : Fin n) : ℝ :=
+  if s = t then 0 else
+    (if u = s then (f * pairDemand kind π s t : ℝ≥0) else 0) -
+    (if u = t then (f * pairDemand kind π s t : ℝ≥0) else 0)
+
+/-- Capacity and exact commodity conservation in the polynomial-size arc formulation. -/
+def IsArcConcurrentFlow {n : ℕ} (kind : EdgeKind) (N : Network n)
+    (π : VertexWeight n) (f : ℝ≥0) (F : ArcFlow n) : Prop :=
+  (∀ u v, totalEdgeLoad kind F u v ≤ N.capacity u v) ∧
+  ∀ s t u, (∑ v, (F s t u v : ℝ)) - (∑ v, (F s t v u : ℝ)) =
+    requiredSupply kind π f s t u
 
 end Lax455465.ConcurrentFlow
