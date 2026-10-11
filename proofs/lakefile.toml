@@ -28,8 +28,3 @@ git = "https://github.com/EdouardBonnet/lax-109476"
 rev = "0a042604c7ae1ef4cd9a4c7d82eb902f313d4864"
 subDir = "concepts"
 
-[[require]]
-name = "Lax109476Proofs"
-git = "https://github.com/EdouardBonnet/lax-109476"
-rev = "0a042604c7ae1ef4cd9a4c7d82eb902f313d4864"
-subDir = "proofs"

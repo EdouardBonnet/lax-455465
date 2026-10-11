@@ -1,5 +1,5 @@
 import Lax455465Proofs.DirectedFlowLP
-import Lax109476Proofs.RamUniformSolver
+import Lax109476.PolynomialTimeSolver
 
 open scoped BigOperators NNRat NNReal
 
@@ -137,7 +137,9 @@ theorem exact_optimal_pair {n : ℕ} (I : RationalInstance n)
     ∃ (f : ℚ) (x : CommodityArc n → ℚ)
       (y : Fin (n * n + 2 * ((n * n) * n)) → ℚ),
       Feasible I f x ∧ DualFeasible (program I) y ∧ f = dualValue (program I) y := by
-  obtain ⟨cert, _, hvalid⟩ := Lax109476Proofs.RamUniformSolver.correct _ _ (program I)
+  obtain ⟨solve, _, hsolve⟩ :=
+    Lax109476.PolynomialTimeSolver.exists_exact_polynomial_time_solver
+  obtain ⟨cert, _, hvalid⟩ := hsolve _ _ (program I)
   cases cert with
   | optimal z y =>
     rcases hvalid with ⟨hz, hy, hval⟩

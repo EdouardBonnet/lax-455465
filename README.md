@@ -90,11 +90,13 @@ is `Lax808846`, pinned transitively to
 `https://github.com/lax-archive/lax-submissions`, commit
 `9394e531cc51cb67a0214bca3f9264dfe97ba5c7`, folder `word-ram/concepts`.
 
-The registered LP development `lax-109476` supplies its public concepts and
-proved exact solver. Both packages are pinned to
+The registered LP development `lax-109476` supplies its public concepts,
+including the exact polynomial-time solver theorem. Its concept package is pinned to
 `https://github.com/EdouardBonnet/lax-109476`, commit
-`0a042604c7ae1ef4cd9a4c7d82eb902f313d4864`, folders `concepts` and `proofs`.
-The dependency uses the registered source in strict archive validation.
+`0a042604c7ae1ef4cd9a4c7d82eb902f313d4864`, folder `concepts`.
+LR uses this registered theorem directly, without importing the LP proof
+package or replaying its implementation. The dependency uses the registered
+source in strict archive validation.
 
 ## Validation
 
