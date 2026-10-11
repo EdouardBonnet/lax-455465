@@ -189,6 +189,12 @@ the final positive-radius acceptance test. Its returned flag agrees exactly
 with the mathematical candidate-search predicate, with a polynomial bound
 covering every intermediate rational.
 
+The complete native radius buffer is proved to match the unsorted grid and
+clipped events used by the mathematical search. A bounded native scan
+records its first accepted candidate, and a final query restores that
+candidate’s exact masks, orientation, boundary, and volume. The recorded
+choice is connected to the mathematical region-search function.
+
 The ordinary algorithm still needs malformed-input guards, the remaining
 native region loop and cut rounding, their resource bounds, and final
 composition. The separate short-path construction is open.
@@ -243,7 +249,8 @@ execution, initialization from decoded dual coordinates, clipped edge
 volumes, rational sums, root-distance vectors, metric costs, strict ball
 membership, masked masses, both boundary orientations, active initialization,
 residual graph reconstruction, root selection, complete seeded volumes,
-mass-based orientation selection, complete radius-acceptance queries,
+mass-based orientation selection, complete radius-acceptance queries, grid/event candidate generation,
+first-success radius search and restoration of the selected query,
 first-match scans, mask products, zero dimensions,
 large rational words, and termination within the
 stated fuel. Each check lists its physical input and expected output in
@@ -253,6 +260,7 @@ stated fuel. Each check lists its physical input and expected output in
 `checks/RootDistances.lean`, `checks/MetricCost.lean`, `checks/BallMass.lean`,
 `checks/Boundary.lean`, `checks/Residual.lean`, `checks/Root.lean`,
 `checks/Volume.lean`, `checks/RegionDirection.lean`, `checks/RegionQuery.lean`,
+`checks/RadiusCandidates.lean`, `checks/RadiusSearch.lean`,
 `checks/Find.lean`, and
 `checks/ProductVector.lean`. The harness compiles
 the native command to the registered word RAM; it does not substitute a host

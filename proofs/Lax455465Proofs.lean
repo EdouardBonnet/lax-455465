@@ -36,6 +36,7 @@ import Lax455465Proofs.PotentialLayers
 import Lax455465Proofs.ProductCorollaries
 import Lax455465Proofs.RadiusData
 import Lax455465Proofs.RadiusLookup
+import Lax455465Proofs.RadiusSearchData
 import Lax455465Proofs.RamActiveInit
 import Lax455465Proofs.RamArcMask
 import Lax455465Proofs.RamArithmetic
@@ -104,6 +105,9 @@ import Lax455465Proofs.RamOptimalDecode
 import Lax455465Proofs.RamPolynomial
 import Lax455465Proofs.RamProductSum
 import Lax455465Proofs.RamProductVector
+import Lax455465Proofs.RamRadiusCandidates
+import Lax455465Proofs.RamRadiusCoefficient
+import Lax455465Proofs.RamRadiusSearch
 import Lax455465Proofs.RamRational
 import Lax455465Proofs.RamRegionAcceptance
 import Lax455465Proofs.RamRegionContext
@@ -116,6 +120,7 @@ import Lax455465Proofs.RamRoot
 import Lax455465Proofs.RamRootDistances
 import Lax455465Proofs.RamScalarBinary
 import Lax455465Proofs.RamScalarComparison
+import Lax455465Proofs.RamSelectedRegion
 import Lax455465Proofs.RamSparseMemory
 import Lax455465Proofs.RamSparseRead
 import Lax455465Proofs.RamTransfer
