@@ -134,7 +134,14 @@ objective in the registered encoding. Its instruction cost is at most
 output. A single fixed native program composes this construction with the
 registered LP invocation and produces a valid certificate for that exact LP.
 
-The ordinary algorithm still needs native input decoding and metric rounding,
+The flow-LP component now has one fixed native command and fixed polynomial
+time and word bounds, with correctness at every larger host word width.
+The native input decoder reads the edge model and graph order from the copied
+input, computes all dimensions, and normalizes the weights and capacities
+into the exact initialized buffers required by construction.
+
+The ordinary algorithm still needs malformed-input guards, native LP
+certificate decoding and metric rounding,
 their remaining resource bounds, and final composition. The separate
 short-path construction is open.
 
