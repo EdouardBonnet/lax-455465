@@ -66,9 +66,14 @@ potential with separation at least 1/6 and returns a cut of ratio at most
 between region positions is bounded by the sum of the chosen removal
 boundaries, charging each crossing arc at its earliest removed endpoint.
 
-The ordinary algorithm still needs the ordered-region partition and its
-balanced cut, followed by the RAM implementation and composition of the
-reduction and rounding stages. The short-path construction is open.
+The ordered-region threshold scan is also proved: with every block below
+2M/3, it returns a cut of product demand at least 5M²/36. Reordering preserves
+block masses, and a boundary charge at most 8KM²W gives cut ratio at most
+(288/5)KW.
+
+The ordinary algorithm still needs the complete region loop and its
+partition invariants, followed by the RAM implementation and composition of
+the reduction and rounding stages. The short-path construction is open.
 
 ## Conventions and dependencies
 

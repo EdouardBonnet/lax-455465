@@ -1,4 +1,6 @@
 import Lax455465Proofs.ArcCertificates
+import Lax455465Proofs.BalancedPrefix
+import Lax455465Proofs.BalancedRegionCut
 import Lax455465Proofs.CutLayers
 import Lax455465Proofs.CutSweeps
 import Lax455465Proofs.DirectedFlowBounds
