@@ -128,8 +128,13 @@ dimensions, row and column indices, and every matrix coefficient. The
 coefficient execution proof includes all conservation signs, equal endpoints,
 self-loops, and exact normalized products of two input weights.
 
-The ordinary algorithm still needs the complete native flow-LP construction
-loops and rounding,
+The complete native LP builder emits the header, matrix, bounds, and
+objective in the registered encoding. Its instruction cost is at most
+10000(L+1)^8 for canonical flow inputs, counting rational normalization and
+output. A single fixed native program composes this construction with the
+registered LP invocation and produces a valid certificate for that exact LP.
+
+The ordinary algorithm still needs native input decoding and metric rounding,
 their remaining resource bounds, and final composition. The separate
 short-path construction is open.
 
