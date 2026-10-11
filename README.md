@@ -49,6 +49,9 @@ and the directed-to-undirected conversion. The rational threshold-selection
 routine and its finite layer-cake rounding bound are also proved. Exact
 rational min-plus distances preserve the dual separation and cost bounds.
 Finite region-volume growth bounds are proved between vertex-distance events.
+The finite event thresholds, product-volume doubling argument, and logarithmic
+iteration budget are proved, including the bound that a failed grid cell
+doubles the product volume along its actual rational candidate list.
 
 The ordinary algorithm still needs the region-growing construction with
 its logarithmic guarantee and the RAM implementation and composition of
