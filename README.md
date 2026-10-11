@@ -86,9 +86,19 @@ certificate with universal constant 512. The actual certificate
 postprocessing function is proved correct for every valid output of the LP
 solver, in both directed and symmetric undirected inputs.
 
-The ordinary algorithm still needs the RAM implementation, its resource
-bounds, and composition with the registered LP solver. The separate
-short-path construction is open.
+The registered LP solver now supplies a fixed virtual RAM program with
+polynomial execution and word-width bounds through its public theorem.
+Sparse virtual memory exactly simulates every registered RAM instruction,
+starts from zero memory, and stores at most one write per successful step.
+Native host lookup and append commands preserve the sparse representation,
+with lookup cost linear in the number of writes and append cost constant.
+The virtual arithmetic commands prove the exact wraparound, complement,
+and guarded-shift behavior at a word width independent of the host width.
+Canonical rational vector and matrix parsers preserve their unconsumed tail.
+
+The ordinary algorithm still needs the complete host interpreter, native
+flow-LP construction and rounding, their resource bounds, and final
+composition. The separate short-path construction is open.
 
 ## Conventions and dependencies
 
@@ -112,6 +122,20 @@ including the exact polynomial-time solver theorem. Its concept package is pinne
 LR uses this registered theorem directly, without importing the LP proof
 package or replaying its implementation. The dependency uses the registered
 source in strict archive validation.
+
+The native implementation uses the verified `Lax808846Proofs` structured
+RAM compiler and its execution/resource interface, pinned to the same
+`9394e531cc51cb67a0214bca3f9264dfe97ba5c7` revision, folder `word-ram/proofs`.
+This compiler is implementation infrastructure; the LP solver remains a
+public concept dependency.
+
+`RamArithmetic`, `RamRational`, `RamComparison`, and `RamTransfer` reuse
+generic RAM utilities from the registered LP source at
+`0a042604c7ae1ef4cd9a4c7d82eb902f313d4864`, under its Apache-2.0 license.
+Their namespaces and local imports are adapted. Each file records the
+source revision, and this repository retains the Apache-2.0 license.
+The sparse virtual machine and host memory commands are new LR support
+proofs.
 
 ## Validation
 

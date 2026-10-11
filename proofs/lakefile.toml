@@ -23,6 +23,12 @@ rev = "134e398cef46599371df99f10c9007bc34ba3868"
 subDir = "concepts"
 
 [[require]]
+name = "Lax808846Proofs"
+git = "https://github.com/lax-archive/lax-submissions"
+rev = "9394e531cc51cb67a0214bca3f9264dfe97ba5c7"
+subDir = "word-ram/proofs"
+
+[[require]]
 name = "Lax109476"
 git = "https://github.com/EdouardBonnet/lax-109476"
 rev = "0a042604c7ae1ef4cd9a4c7d82eb902f313d4864"
