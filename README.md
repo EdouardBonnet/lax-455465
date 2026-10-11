@@ -140,9 +140,14 @@ The native input decoder reads the edge model and graph order from the copied
 input, computes all dimensions, and normalizes the weights and capacities
 into the exact initialized buffers required by construction.
 
-The ordinary algorithm still needs malformed-input guards, native LP
-certificate decoding and metric rounding,
-their remaining resource bounds, and final composition. The separate
+The LP stage now composes physical input reading, graph decoding, LP
+construction, execution, and certificate decoding into one fixed native
+command. For inputs with at least two positive weights it obtains the actual
+matching primal and dual witnesses, in canonical unsigned rational buffers.
+The interpreter preserves the source graph, dimensions, and edge model.
+
+The ordinary algorithm still needs malformed-input guards, native metric
+rounding, its remaining resource bounds, and final composition. The separate
 short-path construction is open.
 
 ## Conventions and dependencies
@@ -186,6 +191,14 @@ proofs.
 
 ```sh
 lax build /home/ebonnet/Bitbucket/lax/leighton-rao --replay
+bash scripts/check-ram.sh
 ```
+
+The compiled RAM checks run from standard zero memory and verify exact
+certificate-coordinate conversion, zero dimensions, large rational words,
+and termination within the stated fuel. Each check lists its physical input
+and expected output in `checks/CertificateDecode.lean`. The harness compiles
+the native command to the registered word RAM; it does not substitute a host
+implementation of the decoder.
 
 Build artifacts use the existing shared mathlib and RAM dependencies.

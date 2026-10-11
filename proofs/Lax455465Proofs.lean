@@ -16,6 +16,7 @@ import Lax455465Proofs.FlowLpEncoding
 import Lax455465Proofs.FlowLpFlat
 import Lax455465Proofs.FlowLpIndices
 import Lax455465Proofs.FlowLpMatrixList
+import Lax455465Proofs.FlowOptimalCertificate
 import Lax455465Proofs.HistoryCharging
 import Lax455465Proofs.InstanceParser
 import Lax455465Proofs.LargeBallRounding
@@ -26,6 +27,7 @@ import Lax455465Proofs.PotentialLayers
 import Lax455465Proofs.ProductCorollaries
 import Lax455465Proofs.RamArithmetic
 import Lax455465Proofs.RamBitSize
+import Lax455465Proofs.RamCertificateVector
 import Lax455465Proofs.RamComparison
 import Lax455465Proofs.RamDecodeFraction
 import Lax455465Proofs.RamDecodeVector
@@ -52,9 +54,14 @@ import Lax455465Proofs.RamGraphHeader
 import Lax455465Proofs.RamGraphInput
 import Lax455465Proofs.RamHostBounds
 import Lax455465Proofs.RamInputCopy
+import Lax455465Proofs.RamInputFlowLp
+import Lax455465Proofs.RamInputOptimal
 import Lax455465Proofs.RamInputSlice
 import Lax455465Proofs.RamLpInputFrame
 import Lax455465Proofs.RamLpPrepare
+import Lax455465Proofs.RamLpRationalRead
+import Lax455465Proofs.RamLpScope
+import Lax455465Proofs.RamOptimalDecode
 import Lax455465Proofs.RamPolynomial
 import Lax455465Proofs.RamRational
 import Lax455465Proofs.RamSparseMemory

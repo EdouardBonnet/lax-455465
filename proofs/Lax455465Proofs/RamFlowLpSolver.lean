@@ -5,7 +5,7 @@ namespace Lax455465Proofs.RamFlowLpSolver
 
 open Lax808846Proofs.Imp Lax808846Proofs.Reasoning RamVirtualState DirectedFlowLP RamFlowData
 open Lax109476.RationalCertificates Lax109476.RationalEncoding
-open Lax759944.BinaryWordEncoding
+open Lax759944.BinaryWordEncoding Lax759944.RamPolytime
 open scoped NNRat
 
 /-- One fixed native construction and black-box solver invocation. -/
@@ -32,6 +32,7 @@ theorem exists_program :
       ∀ {n : ℕ} (I : Lax455465.RationalEncoding.RationalInstance n),
         ∃ certificate : Certificate (rows n) (columns n),
           IsValidCertificate (program I) certificate ∧
+          FitsInWords (WB.eval (bitSize (encodeProgram (program I)))) (encodeCertificate certificate) ∧
           ∀ (B M : ℕ), BuildFits B M n →
             InvokeFits B p WB TB (bitSize (encodeProgram (program I))) →
             (∀ z, (I.weight z).num ≤ M) → (∀ z, (I.weight z).den ≤ M) →
@@ -50,7 +51,7 @@ theorem exists_program :
   refine ⟨p,WB,TB,coefficients,?_⟩
   intro n I
   obtain ⟨certificate,hvalid,hfit,hsolve⟩ := hinvoke (rows n) (columns n) (program I)
-  refine ⟨certificate,hvalid,?_⟩
+  refine ⟨certificate,hvalid,fun x hx => hfit x (List.mem_append_right _ hx),?_⟩
   rintro B M ⟨hM,hB,hni,hn2,hn3,hr,hc,hm,hcapindex,hlen⟩
     ⟨hsize,hpoly,hvirtual,htime,hallow⟩ hnum hden hcapnum hcapden
   rintro σ ⟨hdata,hroom,hinputRoom,hA,hV,hO⟩

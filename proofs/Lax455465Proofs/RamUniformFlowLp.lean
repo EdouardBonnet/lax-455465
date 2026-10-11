@@ -1,10 +1,11 @@
 import Lax455465Proofs.RamFlowHostWidth
+import Lax455465Proofs.RamLpScope
 
 namespace Lax455465Proofs.RamUniformFlowLp
 
 open Lax808846Proofs.Imp Lax808846Proofs.Reasoning RamVirtualState DirectedFlowLP RamFlowData
 open Lax455465.RationalEncoding Lax109476.RationalCertificates
-open Lax759944.BinaryWordEncoding
+open Lax759944.BinaryWordEncoding Lax759944.RamPolytime
 open scoped NNRat
 
 /-- Uniform native flow-LP component: one fixed command and polynomial
@@ -21,14 +22,16 @@ theorem exists_program :
               sourceTime.eval (bitSize (Lax109476.RationalEncoding.encodeProgram (program I))) < (σ.arrs "vm.addresses").length ∧
               sourceTime.eval (bitSize (Lax109476.RationalEncoding.encodeProgram (program I))) < (σ.arrs "vm.values").length ∧
               sourceTime.eval (bitSize (Lax109476.RationalEncoding.encodeProgram (program I))) < (σ.arrs "vm.output").length)
-              c (fun _ τ => Prefix (Lax109476.RationalEncoding.encodeCertificate certificate) "vm.output" τ ∧
+              c (fun σ τ => Data I τ ∧
+                τ.vars "flow.kind" = σ.vars "flow.kind" ∧
+                (∀ x ∈ Lax109476.RationalEncoding.encodeCertificate certificate, x < 2^W) ∧ Prefix (Lax109476.RationalEncoding.encodeCertificate certificate) "vm.output" τ ∧
                 τ.vars "vm.outputLength" = (Lax109476.RationalEncoding.encodeCertificate certificate).length ∧
                 τ.vars "vm.running" = 0) (timeBound.eval (bitSize (encodeInput kind I))) := by
   obtain ⟨p,WB,TB,coefficients,hsolve⟩ := RamFlowLpSolver.exists_program
   refine ⟨RamFlowLpSolver.command p coefficients,RamFlowSolverBounds.timeBound p coefficients TB,
     RamFlowHostWidth.wordBound p WB TB,TB,?_⟩
   intro n kind I
-  obtain ⟨certificate,hvalid,hcorrect⟩ := hsolve I
+  obtain ⟨certificate,hvalid,hfit,hcorrect⟩ := hsolve I
   refine ⟨certificate,hvalid,?_⟩
   intro W hW
   let L := bitSize (encodeInput kind I)
@@ -45,6 +48,11 @@ theorem exists_program :
   have hbounded := hcorrect (2^W) M hbuildFits hinvokeFits hnum hden hcapnum hcapden
   intro σ hpre
   obtain ⟨τ,hrun,hpost⟩ := hbounded σ hpre
-  exact ⟨τ,hrun.mono (RamFlowSolverBounds.cost_bound p coefficients TB kind I),hpost⟩
+  exact ⟨τ,hrun.mono (RamFlowSolverBounds.cost_bound p coefficients TB kind I),
+    RamLpScope.solver_data hrun I hpre.1,
+    hrun.frame_var "flow.kind" (RamLpScope.solver_vars p coefficients _ (by simp [RamLpScope.protectedVars])),
+    fun x hx => lt_trans (hfit x hx) (by
+      obtain ⟨_,_,hv,_,_⟩ := hinvokeFits
+      nlinarith [Nat.two_pow_pos (WB.eval (bitSize (Lax109476.RationalEncoding.encodeProgram (program I))))]),hpost⟩
 
 end Lax455465Proofs.RamUniformFlowLp
