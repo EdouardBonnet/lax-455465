@@ -167,6 +167,13 @@ native scan is proved to record the first successful test. The radius search
 scans grid endpoints and clipped vertex events directly; its correctness
 proof retains the same volume-growth and approximation guarantees.
 
+The physical-input pipeline also computes and saves the exact metric cost
+with uniform polynomial resources. Native strict-ball masks and masked mass
+sums are proved to match the region-selection expressions, including
+threshold equality and zero-weight vertices. Coordinatewise products
+implement residual mask intersection and weighting without changing source
+buffers.
+
 The ordinary algorithm still needs malformed-input guards, the remaining
 native region loop and cut rounding, their resource bounds, and final
 composition. The separate short-path construction is open.
@@ -218,13 +225,15 @@ bash scripts/check-ram.sh
 The compiled RAM checks run from standard zero memory and verify exact
 certificate-coordinate conversion, min-plus updates, full Floyd–Warshall
 execution, initialization from decoded dual coordinates, clipped edge
-volumes, rational sums, root-distance vectors, metric costs, zero dimensions,
+volumes, rational sums, root-distance vectors, metric costs, strict ball
+membership, masked masses, first-match scans, residual mask products, zero dimensions,
 large rational words, and termination within the
 stated fuel. Each check lists its physical input and expected output in
 `checks/CertificateDecode.lean`, `checks/MinPlus.lean`, or
 `checks/FloydWarshall.lean`, `checks/DualDistances.lean`,
 `checks/RegionArithmetic.lean`, `checks/EdgePortion.lean`,
-`checks/RootDistances.lean`, and `checks/MetricCost.lean`. The harness compiles
+`checks/RootDistances.lean`, `checks/MetricCost.lean`, `checks/BallMass.lean`,
+`checks/Find.lean`, and `checks/ProductVector.lean`. The harness compiles
 the native command to the registered word RAM; it does not substitute a host
 implementation of the decoder.
 

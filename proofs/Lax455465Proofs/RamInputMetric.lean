@@ -33,7 +33,8 @@ theorem exists_program :
               sourceTime.eval (bitSize (Lax109476.RationalEncoding.encodeProgram (program I))) < (σ.arrs "vm.output").length ∧
               2*columns n < (σ.arrs "flow.primal").length ∧ 2*rows n < (σ.arrs "flow.dual").length ∧
               2*(n*n) < (σ.arrs "metric.old").length ∧ 2*(n*n) < (σ.arrs "metric.new").length)
-              c (fun _ τ => Data I τ ∧ τ.vars "flow.kind" = RamGraphHeader.tag kind ∧
+              c (fun _ τ => Data I τ ∧ τ.vars "metric.n" = n ∧ τ.vars "metric.n2" = n*n ∧
+                τ.vars "flow.kind" = RamGraphHeader.tag kind ∧
                 Prefix (RamUnsignedBuffer.encode (RamOptimalDecode.vector z hz.1)) "flow.primal" τ ∧
                 Prefix (RamUnsignedBuffer.encode (RamOptimalDecode.vector y hy.1)) "flow.dual" τ ∧
                 Prefix (RamUnsignedBuffer.encode (MetricMatrix.values (RamDualDistances.result y hy.1))) "metric.old" τ)
@@ -81,7 +82,7 @@ theorem exists_program :
     omega
   have hdistCost := RamDistanceResources.time_bound sourceWord kind I
   change n*((72*(w*(n*n+1))+324)*(n*n)+22)+10 ≤ (RamDistanceResources.timeBound sourceWord).eval L at hdistCost
-  refine ⟨τ,(rlp.seq rdist).mono ?_,RamFlowData.frame rdist I plp.1 (by decide) (by decide),
+  refine ⟨τ,(rlp.seq rdist).mono ?_,RamFlowData.frame rdist I plp.1 (by decide) (by decide),pdist.1,pdist.2.1,
     (rdist.frame_var "flow.kind" (by decide)).trans plp.2.1,?_,?_,pdist.2.2⟩
   · simp only [Polynomial.eval_add]
     dsimp only [L,w] at hinitCost hdistCost ⊢

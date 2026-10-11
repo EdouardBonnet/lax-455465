@@ -1,6 +1,7 @@
 import Lax455465Proofs.ArcCertificates
 import Lax455465Proofs.BalancedPrefix
 import Lax455465Proofs.BalancedRegionCut
+import Lax455465Proofs.BallMassData
 import Lax455465Proofs.CertificatePostprocessing
 import Lax455465Proofs.CutLayers
 import Lax455465Proofs.CutSweeps
@@ -23,6 +24,7 @@ import Lax455465Proofs.InstanceParser
 import Lax455465Proofs.LargeBallRounding
 import Lax455465Proofs.LpCertificateParser
 import Lax455465Proofs.LpInputSize
+import Lax455465Proofs.MaskedMassData
 import Lax455465Proofs.MetricCostData
 import Lax455465Proofs.MetricCostHeight
 import Lax455465Proofs.MetricHeight
@@ -35,6 +37,8 @@ import Lax455465Proofs.RamArithmetic
 import Lax455465Proofs.RamArrayCopy
 import Lax455465Proofs.RamArrayProduct
 import Lax455465Proofs.RamArraySum
+import Lax455465Proofs.RamBallMask
+import Lax455465Proofs.RamBallMass
 import Lax455465Proofs.RamBitSize
 import Lax455465Proofs.RamCertificateVector
 import Lax455465Proofs.RamComparison
@@ -72,13 +76,16 @@ import Lax455465Proofs.RamHostBounds
 import Lax455465Proofs.RamInputCopy
 import Lax455465Proofs.RamInputFlowLp
 import Lax455465Proofs.RamInputMetric
+import Lax455465Proofs.RamInputMetricCost
 import Lax455465Proofs.RamInputOptimal
 import Lax455465Proofs.RamInputSlice
 import Lax455465Proofs.RamLpInputFrame
 import Lax455465Proofs.RamLpPrepare
 import Lax455465Proofs.RamLpRationalRead
 import Lax455465Proofs.RamLpScope
+import Lax455465Proofs.RamMaskedSum
 import Lax455465Proofs.RamMetricCost
+import Lax455465Proofs.RamMetricCostResources
 import Lax455465Proofs.RamMetricIndices
 import Lax455465Proofs.RamMetricPivot
 import Lax455465Proofs.RamMinPlus
@@ -86,6 +93,7 @@ import Lax455465Proofs.RamMinimum
 import Lax455465Proofs.RamOptimalDecode
 import Lax455465Proofs.RamPolynomial
 import Lax455465Proofs.RamProductSum
+import Lax455465Proofs.RamProductVector
 import Lax455465Proofs.RamRational
 import Lax455465Proofs.RamRootDistances
 import Lax455465Proofs.RamScalarBinary
