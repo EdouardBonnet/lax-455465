@@ -23,6 +23,17 @@ theorem argument_frame (coefficients : List ℕ) : "poly.argument" ∉ (command 
   | nil => simp [command, Com.wvars]
   | cons a rest ih => simp [command, Com.wvars, ih]
 
+theorem variable_frame (coefficients : List ℕ) (x : String) (hx : x ≠ "poly.value") :
+    x ∉ (command coefficients).wvars := by
+  induction coefficients with
+  | nil => simp [command, Com.wvars, hx]
+  | cons a rest ih => simp [command, Com.wvars, ih, hx]
+
+theorem arrays_frame (coefficients : List ℕ) : (command coefficients).warrs = [] := by
+  induction coefficients with
+  | nil => simp [command, Com.warrs]
+  | cons a rest ih => simp [command, Com.warrs, ih]
+
 theorem value_mono (coefficients : List ℕ) {x y : ℕ} (h : x ≤ y) :
     value coefficients x ≤ value coefficients y := by
   induction coefficients with

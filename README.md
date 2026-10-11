@@ -110,6 +110,9 @@ of the host width. The physical input copy is also proved for arbitrary
 logical words. The registered LP concept theorem now supplies a native
 invocation producing exactly the same valid certificate in a private buffer,
 with explicit sufficient host bounds and quadratic simulation overhead.
+The full invocation computes the virtual word width from the actual LP
+buffer using its binary-size counter and a fixed Horner program, frames the
+input, and runs the interpreter. It requires no supplied word-width value.
 
 The runtime binary-size counter and fixed Horner polynomial programs are
 proved. The dense flow-LP input has binary size at most 128(L+1)^8, where L
