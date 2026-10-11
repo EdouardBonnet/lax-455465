@@ -159,8 +159,16 @@ LP construction and execution, certificate decoding, and the full shortest-
 distance computation, with polynomial time and word bounds in the source
 input size. The original graph and matching flow buffers are preserved.
 
-The ordinary algorithm still needs malformed-input guards, native region
-growth and cut rounding, their remaining resource bounds, and final
+Native commands now extract both distance vectors for a runtime root,
+perform clipped edge-volume arithmetic, and sum the exact metric cost from
+the actual source capacities and computed distance buffer. Shared denominator
+invariants give polynomial heights for all partial rational sums. A bounded
+native scan is proved to record the first successful test. The radius search
+scans grid endpoints and clipped vertex events directly; its correctness
+proof retains the same volume-growth and approximation guarantees.
+
+The ordinary algorithm still needs malformed-input guards, the remaining
+native region loop and cut rounding, their resource bounds, and final
 composition. The separate short-path construction is open.
 
 ## Conventions and dependencies
@@ -209,11 +217,14 @@ bash scripts/check-ram.sh
 
 The compiled RAM checks run from standard zero memory and verify exact
 certificate-coordinate conversion, min-plus updates, full Floyd–Warshall
-execution, initialization from decoded dual coordinates, zero dimensions,
+execution, initialization from decoded dual coordinates, clipped edge
+volumes, rational sums, root-distance vectors, metric costs, zero dimensions,
 large rational words, and termination within the
 stated fuel. Each check lists its physical input and expected output in
 `checks/CertificateDecode.lean`, `checks/MinPlus.lean`, or
-`checks/FloydWarshall.lean`, and `checks/DualDistances.lean`. The harness compiles
+`checks/FloydWarshall.lean`, `checks/DualDistances.lean`,
+`checks/RegionArithmetic.lean`, `checks/EdgePortion.lean`,
+`checks/RootDistances.lean`, and `checks/MetricCost.lean`. The harness compiles
 the native command to the registered word RAM; it does not substitute a host
 implementation of the decoder.
 

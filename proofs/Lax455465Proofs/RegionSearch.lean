@@ -10,11 +10,13 @@ def grid (k : ℕ) (delta : ℚ) (j : ℕ) : ℚ := delta * j / k
 
 def slope (k : ℕ) (delta : ℚ) : ℚ := k / delta
 
+/-- Runtime candidates need no sorting: grid endpoints followed by both
+vertex-distance vectors clipped to the radius budget. -/
 def candidates {n : ℕ} (outDistance inDistance : Fin n → ℚ)
     (k : ℕ) (delta : ℚ) : List ℚ :=
-  (List.range k).flatMap fun j =>
-    RegionThresholds.candidates outDistance inDistance
-      (grid k delta j) (grid k delta (j + 1))
+  (List.range (k+1)).map (grid k delta) ++
+    List.ofFn (fun v => min delta (max (outDistance v) 0)) ++
+    List.ofFn (fun v => min delta (max (inDistance v) 0))
 
 /-- The orientation is computed separately, for example by comparing the
 two ball masses. The radius search works for any such choice. -/
@@ -70,21 +72,46 @@ private theorem grid_width (k : ℕ) (delta : ℚ) (j : ℕ)
   field_simp [hkq, ne_of_gt hd]
   ring
 
+private theorem grid_le (k : ℕ) (delta : ℚ) (j : ℕ)
+    (hk : 0 < k) (hd : 0 ≤ delta) (hj : j ≤ k) : grid k delta j ≤ delta := by
+  calc
+    grid k delta j ≤ grid k delta k := by
+      unfold grid
+      apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg k)
+      exact mul_le_mul_of_nonneg_left (by exact_mod_cast hj) hd
+    _ = delta := grid_last k delta hk
+
+theorem candidates_length {n : ℕ} (outDistance inDistance : Fin n → ℚ) (k : ℕ) (delta : ℚ) :
+    (candidates outDistance inDistance k delta).length = k+1+2*n := by
+  simp only [candidates,List.length_append,List.length_map,List.length_range,List.length_ofFn]
+  omega
+
 /-- Every tested radius lies inside the prescribed rational radius budget. -/
 theorem candidates_bound {n : ℕ} (outDistance inDistance : Fin n → ℚ)
     (k : ℕ) (delta r : ℚ) (hk : 0 < k) (hd : 0 ≤ delta)
     (hr : r ∈ candidates outDistance inDistance k delta) : 0 ≤ r ∧ r ≤ delta := by
-  obtain ⟨j, hj, hrj⟩ := List.mem_flatMap.mp hr
-  have hjk : j < k := List.mem_range.mp hj
-  have hb := RegionThresholds.bounds outDistance inDistance
-    (grid k delta j) (grid k delta (j + 1)) (grid_mono k delta j hd) r
-    ((Finset.mem_sort (· ≤ ·)).mp hrj)
-  have hlast : grid k delta (j + 1) ≤ grid k delta k := by
-    unfold grid
-    apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg k)
-    exact mul_le_mul_of_nonneg_left (by exact_mod_cast Nat.succ_le_of_lt hjk) hd
-  rw [grid_last k delta hk] at hlast
-  exact ⟨(grid_nonneg k delta j hd).trans hb.1, hb.2.trans hlast⟩
+  simp only [candidates,List.mem_append,List.mem_map,List.mem_ofFn] at hr
+  rcases hr with (⟨j,hj,rfl⟩ | ⟨v,rfl⟩) | ⟨v,rfl⟩
+  · exact ⟨grid_nonneg k delta j hd,grid_le k delta j hk hd (by have hh := List.mem_range.mp hj; omega)⟩
+  · exact ⟨le_min hd (le_max_right _ _),min_le_left _ _⟩
+  · exact ⟨le_min hd (le_max_right _ _),min_le_left _ _⟩
+
+/-- The unsorted runtime list contains every event used in the mathematical
+volume-growth argument. Duplicate radii are harmless. -/
+theorem event_mem_candidates {n : ℕ} (outDistance inDistance : Fin n → ℚ)
+    (k : ℕ) (delta : ℚ) (j : ℕ) (r : ℚ) (hk : 0 < k) (hd : 0 ≤ delta) (hj : j < k)
+    (hr : r ∈ RegionThresholds.events outDistance inDistance (grid k delta j) (grid k delta (j+1))) :
+    r ∈ candidates outDistance inDistance k delta := by
+  have hb := RegionThresholds.bounds outDistance inDistance _ _ (grid_mono k delta j hd) r hr
+  have hnonnegative : 0 ≤ r := (grid_nonneg k delta j hd).trans hb.1
+  have hdelta : r ≤ delta := hb.2.trans (grid_le k delta (j+1) hk hd (by omega))
+  simp only [RegionThresholds.events,Finset.mem_insert,Finset.mem_filter,Finset.mem_union,Finset.mem_image] at hr
+  simp only [candidates,List.mem_append,List.mem_map,List.mem_ofFn]
+  rcases hr with rfl | rfl | ⟨(⟨v,hv,rfl⟩ | ⟨v,hv,rfl⟩),hcell⟩
+  · exact Or.inl (Or.inl ⟨j,List.mem_range.mpr (by omega),rfl⟩)
+  · exact Or.inl (Or.inl ⟨j+1,List.mem_range.mpr (by omega),rfl⟩)
+  · exact Or.inl (Or.inr ⟨v,by rw [max_eq_left hnonnegative,min_eq_right hdelta]⟩)
+  · exact Or.inr ⟨v,by rw [max_eq_left hnonnegative,min_eq_right hdelta]⟩
 
 /-- Some tested positive threshold succeeds: otherwise each grid cell
 doubles the product volume, contradicting the finite 4p² budget. -/
@@ -118,9 +145,7 @@ theorem exists_good {n : ℕ} (capacity length : Matrix n)
         boundary (fun u v => capacity v u) inDistance r := by
     intro r hr hpos
     have hmem : r ∈ candidates outDistance inDistance k delta := by
-      apply List.mem_flatMap.mpr
-      refine ⟨j, List.mem_range.mpr hj, ?_⟩
-      exact (Finset.mem_sort (· ≤ ·)).mpr hr
+      exact event_mem_candidates outDistance inDistance k delta j r hk hd.le hj hr
     have hfail : ¬ Good capacity length outDistance inDistance seed (slope k delta) direction r := by
       intro hg
       exact h ⟨r, hmem, hpos, hg⟩
