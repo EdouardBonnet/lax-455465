@@ -71,9 +71,24 @@ The ordered-region threshold scan is also proved: with every block below
 block masses, and a boundary charge at most 8KM²W gives cut ratio at most
 (288/5)KW.
 
-The ordinary algorithm still needs the complete region loop and its
-partition invariants, followed by the RAM implementation and composition of
-the reduction and rounding stages. The short-path construction is open.
+The complete deterministic region loop and its history invariants are now
+proved. Within the initial support budget it either finds two large root
+balls or exhausts all positive-weight vertices through small removals.
+Earliest-removal labels preserve the actual block masses and identify each
+label charge with its residual boundary. The complete history telescopes to
+the required boundary bound. The zero-cost branch scans a positively
+separated pair and returns a zero-capacity cut without a positive seed.
+
+The finite rational rounding algorithm and its logarithmic approximation
+bound are proved for all nonnegative separated directed metrics. Applied to
+the exact flow-LP dual distances, it yields a joint cut and concurrent-flow
+certificate with universal constant 512. The actual certificate
+postprocessing function is proved correct for every valid output of the LP
+solver, in both directed and symmetric undirected inputs.
+
+The ordinary algorithm still needs the RAM implementation, its resource
+bounds, and composition with the registered LP solver. The separate
+short-path construction is open.
 
 ## Conventions and dependencies
 
