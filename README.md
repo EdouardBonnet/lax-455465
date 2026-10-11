@@ -111,9 +111,17 @@ logical words. The registered LP concept theorem now supplies a native
 invocation producing exactly the same valid certificate in a private buffer,
 with explicit sufficient host bounds and quadratic simulation overhead.
 
-The ordinary algorithm still needs runtime computation of its word-width
-bound, native flow-LP construction and rounding, their resource bounds, and
-final composition. The separate short-path construction is open.
+The runtime binary-size counter and fixed Horner polynomial programs are
+proved. The dense flow-LP input has binary size at most 128(L+1)^8, where L
+is the original input size; this includes all dimensions and coefficients.
+Unsigned rational input pairs and canonical signed LP rational buffer output
+are implemented with exact execution proofs. A sufficient host width is
+linear in the virtual width, source time, input length, and fixed program
+allowance, and works at every larger host width.
+
+The ordinary algorithm still needs native flow-LP construction and rounding,
+their remaining resource bounds, and final composition. The separate
+short-path construction is open.
 
 ## Conventions and dependencies
 

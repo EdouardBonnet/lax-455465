@@ -14,13 +14,19 @@ import Lax455465Proofs.HistoryCharging
 import Lax455465Proofs.InstanceParser
 import Lax455465Proofs.LargeBallRounding
 import Lax455465Proofs.LpCertificateParser
+import Lax455465Proofs.LpInputSize
 import Lax455465Proofs.MetricRounding
 import Lax455465Proofs.PotentialLayers
 import Lax455465Proofs.ProductCorollaries
 import Lax455465Proofs.RamArithmetic
+import Lax455465Proofs.RamBitSize
 import Lax455465Proofs.RamComparison
+import Lax455465Proofs.RamDecodeFraction
+import Lax455465Proofs.RamFractionEncoding
 import Lax455465Proofs.RamFrames
+import Lax455465Proofs.RamHostBounds
 import Lax455465Proofs.RamInputCopy
+import Lax455465Proofs.RamPolynomial
 import Lax455465Proofs.RamRational
 import Lax455465Proofs.RamSparseMemory
 import Lax455465Proofs.RamSparseRead
@@ -44,6 +50,7 @@ import Lax455465Proofs.RamVirtualRead
 import Lax455465Proofs.RamVirtualStage
 import Lax455465Proofs.RamVirtualState
 import Lax455465Proofs.RamVirtualTraceBounds
+import Lax455465Proofs.RamWordBuffer
 import Lax455465Proofs.RamWordOps
 import Lax455465Proofs.RationalDistances
 import Lax455465Proofs.RationalParser
