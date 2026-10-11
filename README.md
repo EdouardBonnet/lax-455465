@@ -100,16 +100,20 @@ certificate parser recovers all three encoded LP outcomes. The complete
 word transformation, parameterized by the registered LP solver, emits the
 same valid joint certificate supplied by the mathematical rounding proof.
 
-The native host program now includes all eighteen instruction cases, with
-separate virtual input and output buffers. Its initialization, array extents,
-register frames, and arithmetic transitions are proved, with cost bounds
-linear in the number of stored virtual writes. The physical input copy is
-proved for arbitrary logical words. These instruction proofs are being
-assembled into the complete bounded interpreter.
+The complete native interpreter is proved for all eighteen instructions,
+including indirect memory, both input views, buffered output, exhausted reads,
+and halting. It starts with zero virtual memory and follows the source
+program's actual running flag. A source execution of k steps uses buffers
+of k+1 entries and at most (k+1)(4|p|+32k+104)+18 native instructions,
+where p is the fixed source program. Its virtual word width is independent
+of the host width. The physical input copy is also proved for arbitrary
+logical words. The registered LP concept theorem now supplies a native
+invocation producing exactly the same valid certificate in a private buffer,
+with explicit sufficient host bounds and quadratic simulation overhead.
 
-The ordinary algorithm still needs the complete host interpreter, native
-flow-LP construction and rounding, their resource bounds, and final
-composition. The separate short-path construction is open.
+The ordinary algorithm still needs runtime computation of its word-width
+bound, native flow-LP construction and rounding, their resource bounds, and
+final composition. The separate short-path construction is open.
 
 ## Conventions and dependencies
 

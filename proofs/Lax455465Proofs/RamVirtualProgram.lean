@@ -75,9 +75,9 @@ def instruction : Lax808846.Ram.Instr → Com
         (writeBack (.lit a) (.var "vm.result")))
   | .halt => stop
   | .read a => .ite (.lt (.var "vm.cursor") (.var "vm.inputLength"))
-      (.seq (.assign "vm.result" (.get "vm.input" (.var "vm.cursor")))
-        (.seq (.assign "vm.cursor" (.add (.var "vm.cursor") (.lit 1)))
-          (writeBack (.lit a) (.var "vm.result")))) stop
+      (.seq (.seq (.assign "vm.result" (.get "vm.input" (.var "vm.cursor")))
+        (.assign "vm.cursor" (.add (.var "vm.cursor") (.lit 1))))
+        (writeBack (.lit a) (.var "vm.result"))) stop
   | .write a => .seq (RamSparseRead.read "vm.left" (remainder (.lit a)))
       (.seq (.store "vm.output" (.var "vm.outputLength") (remainder (.var "vm.left")))
         (.seq (.assign "vm.outputLength" (.add (.var "vm.outputLength") (.lit 1))) increment))
