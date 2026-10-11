@@ -183,6 +183,11 @@ volume commands in both directions read and clip each edge contribution,
 sum it, and add the seed; one polynomial bound covers all intermediates and
 their execution resources. The computed ball masses also determine the
 orientation, with outward ties matching the region-loop definition.
+A single fixed native query now composes both ball masses, orientation
+selection, the chosen boundary and volume, multiplication by the slope, and
+the final positive-radius acceptance test. Its returned flag agrees exactly
+with the mathematical candidate-search predicate, with a polynomial bound
+covering every intermediate rational.
 
 The ordinary algorithm still needs malformed-input guards, the remaining
 native region loop and cut rounding, their resource bounds, and final
@@ -238,7 +243,8 @@ execution, initialization from decoded dual coordinates, clipped edge
 volumes, rational sums, root-distance vectors, metric costs, strict ball
 membership, masked masses, both boundary orientations, active initialization,
 residual graph reconstruction, root selection, complete seeded volumes,
-mass-based orientation selection, first-match scans, mask products, zero dimensions,
+mass-based orientation selection, complete radius-acceptance queries,
+first-match scans, mask products, zero dimensions,
 large rational words, and termination within the
 stated fuel. Each check lists its physical input and expected output in
 `checks/CertificateDecode.lean`, `checks/MinPlus.lean`, or
@@ -246,7 +252,8 @@ stated fuel. Each check lists its physical input and expected output in
 `checks/RegionArithmetic.lean`, `checks/EdgePortion.lean`,
 `checks/RootDistances.lean`, `checks/MetricCost.lean`, `checks/BallMass.lean`,
 `checks/Boundary.lean`, `checks/Residual.lean`, `checks/Root.lean`,
-`checks/Volume.lean`, `checks/RegionDirection.lean`, `checks/Find.lean`, and
+`checks/Volume.lean`, `checks/RegionDirection.lean`, `checks/RegionQuery.lean`,
+`checks/Find.lean`, and
 `checks/ProductVector.lean`. The harness compiles
 the native command to the registered word RAM; it does not substitute a host
 implementation of the decoder.
