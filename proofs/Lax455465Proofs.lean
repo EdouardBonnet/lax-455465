@@ -101,9 +101,13 @@ import Lax455465Proofs.RamPolynomial
 import Lax455465Proofs.RamProductSum
 import Lax455465Proofs.RamProductVector
 import Lax455465Proofs.RamRational
+import Lax455465Proofs.RamRegionContext
+import Lax455465Proofs.RamRegionDirection
 import Lax455465Proofs.RamResidual
+import Lax455465Proofs.RamRoot
 import Lax455465Proofs.RamRootDistances
 import Lax455465Proofs.RamScalarBinary
+import Lax455465Proofs.RamScalarComparison
 import Lax455465Proofs.RamSparseMemory
 import Lax455465Proofs.RamSparseRead
 import Lax455465Proofs.RamTransfer
@@ -135,6 +139,10 @@ import Lax455465Proofs.RamVirtualRead
 import Lax455465Proofs.RamVirtualStage
 import Lax455465Proofs.RamVirtualState
 import Lax455465Proofs.RamVirtualTraceBounds
+import Lax455465Proofs.RamVolume
+import Lax455465Proofs.RamVolumeCoefficient
+import Lax455465Proofs.RamVolumeDyadic
+import Lax455465Proofs.RamVolumeResources
 import Lax455465Proofs.RamWeightProduct
 import Lax455465Proofs.RamWordBuffer
 import Lax455465Proofs.RamWordOps
@@ -149,6 +157,8 @@ import Lax455465Proofs.RegionHistory
 import Lax455465Proofs.RegionInterval
 import Lax455465Proofs.RegionLoop
 import Lax455465Proofs.RegionOrdering
+import Lax455465Proofs.RegionQueryData
+import Lax455465Proofs.RegionQueryHeight
 import Lax455465Proofs.RegionRounding
 import Lax455465Proofs.RegionSearch
 import Lax455465Proofs.RegionSelection
@@ -158,6 +168,7 @@ import Lax455465Proofs.RegisteredLpExecution
 import Lax455465Proofs.RegisteredLpInvocation
 import Lax455465Proofs.RegisteredLpNative
 import Lax455465Proofs.ResidualData
+import Lax455465Proofs.RootData
 import Lax455465Proofs.SetDistances
 import Lax455465Proofs.SparseBounds
 import Lax455465Proofs.SparseRam
@@ -165,5 +176,6 @@ import Lax455465Proofs.ThresholdRounding
 import Lax455465Proofs.UndirectedConversion
 import Lax455465Proofs.UnsignedHeight
 import Lax455465Proofs.VolumeData
+import Lax455465Proofs.VolumeHeight
 import Lax455465Proofs.WordSize
 import Lax455465Proofs.ZeroCostRounding

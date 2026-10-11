@@ -178,6 +178,11 @@ initializes every vertex as active and reconstructs residual capacities and
 weights from the original graph and current membership flags. These
 reconstructed arrays match the residual graph in the region-loop proof, and
 their coordinate heights stay bounded by those of the original input.
+The native root scan matches the first positive residual weight. Complete
+volume commands in both directions read and clip each edge contribution,
+sum it, and add the seed; one polynomial bound covers all intermediates and
+their execution resources. The computed ball masses also determine the
+orientation, with outward ties matching the region-loop definition.
 
 The ordinary algorithm still needs malformed-input guards, the remaining
 native region loop and cut rounding, their resource bounds, and final
@@ -232,14 +237,16 @@ certificate-coordinate conversion, min-plus updates, full Floyd–Warshall
 execution, initialization from decoded dual coordinates, clipped edge
 volumes, rational sums, root-distance vectors, metric costs, strict ball
 membership, masked masses, both boundary orientations, active initialization,
-residual graph reconstruction, first-match scans, mask products, zero dimensions,
+residual graph reconstruction, root selection, complete seeded volumes,
+mass-based orientation selection, first-match scans, mask products, zero dimensions,
 large rational words, and termination within the
 stated fuel. Each check lists its physical input and expected output in
 `checks/CertificateDecode.lean`, `checks/MinPlus.lean`, or
 `checks/FloydWarshall.lean`, `checks/DualDistances.lean`,
 `checks/RegionArithmetic.lean`, `checks/EdgePortion.lean`,
 `checks/RootDistances.lean`, `checks/MetricCost.lean`, `checks/BallMass.lean`,
-`checks/Boundary.lean`, `checks/Residual.lean`, `checks/Find.lean`, and
+`checks/Boundary.lean`, `checks/Residual.lean`, `checks/Root.lean`,
+`checks/Volume.lean`, `checks/RegionDirection.lean`, `checks/Find.lean`, and
 `checks/ProductVector.lean`. The harness compiles
 the native command to the registered word RAM; it does not substitute a host
 implementation of the decoder.
