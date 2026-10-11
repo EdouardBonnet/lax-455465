@@ -153,10 +153,15 @@ addition candidate. The actual returned LP certificate supplies the initial
 coordinate bounds, giving polynomial distance bit heights in the original
 graph input size.
 
-The ordinary algorithm still needs malformed-input guards, initialization
-and composition of native distances with LP decoding, native region growth
-and cut rounding, their remaining resource bounds, and final composition. The separate
-short-path construction is open.
+The distance initializer reads the actual decoded dual coordinates and zeros
+the diagonal. One fixed native command now composes physical graph input,
+LP construction and execution, certificate decoding, and the full shortest-
+distance computation, with polynomial time and word bounds in the source
+input size. The original graph and matching flow buffers are preserved.
+
+The ordinary algorithm still needs malformed-input guards, native region
+growth and cut rounding, their remaining resource bounds, and final
+composition. The separate short-path construction is open.
 
 ## Conventions and dependencies
 
@@ -204,10 +209,11 @@ bash scripts/check-ram.sh
 
 The compiled RAM checks run from standard zero memory and verify exact
 certificate-coordinate conversion, min-plus updates, full Floyd–Warshall
-execution, zero dimensions, large rational words, and termination within the
+execution, initialization from decoded dual coordinates, zero dimensions,
+large rational words, and termination within the
 stated fuel. Each check lists its physical input and expected output in
 `checks/CertificateDecode.lean`, `checks/MinPlus.lean`, or
-`checks/FloydWarshall.lean`. The harness compiles
+`checks/FloydWarshall.lean`, and `checks/DualDistances.lean`. The harness compiles
 the native command to the registered word RAM; it does not substitute a host
 implementation of the decoder.
 

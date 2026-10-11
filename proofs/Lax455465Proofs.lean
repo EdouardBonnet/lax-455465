@@ -36,6 +36,9 @@ import Lax455465Proofs.RamCertificateVector
 import Lax455465Proofs.RamComparison
 import Lax455465Proofs.RamDecodeFraction
 import Lax455465Proofs.RamDecodeVector
+import Lax455465Proofs.RamDistanceResources
+import Lax455465Proofs.RamDualDistances
+import Lax455465Proofs.RamDualDistancesInit
 import Lax455465Proofs.RamFlowBalance
 import Lax455465Proofs.RamFlowCoefficient
 import Lax455465Proofs.RamFlowContext
@@ -62,6 +65,7 @@ import Lax455465Proofs.RamGraphInput
 import Lax455465Proofs.RamHostBounds
 import Lax455465Proofs.RamInputCopy
 import Lax455465Proofs.RamInputFlowLp
+import Lax455465Proofs.RamInputMetric
 import Lax455465Proofs.RamInputOptimal
 import Lax455465Proofs.RamInputSlice
 import Lax455465Proofs.RamLpInputFrame
