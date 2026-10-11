@@ -95,6 +95,17 @@ with lookup cost linear in the number of writes and append cost constant.
 The virtual arithmetic commands prove the exact wraparound, complement,
 and guarded-shift behavior at a word width independent of the host width.
 Canonical rational vector and matrix parsers preserve their unconsumed tail.
+The instance parser recovers the public flow encoding exactly, and the LP
+certificate parser recovers all three encoded LP outcomes. The complete
+word transformation, parameterized by the registered LP solver, emits the
+same valid joint certificate supplied by the mathematical rounding proof.
+
+The native host program now includes all eighteen instruction cases, with
+separate virtual input and output buffers. Its initialization, array extents,
+register frames, and arithmetic transitions are proved, with cost bounds
+linear in the number of stored virtual writes. The physical input copy is
+proved for arbitrary logical words. These instruction proofs are being
+assembled into the complete bounded interpreter.
 
 The ordinary algorithm still needs the complete host interpreter, native
 flow-LP construction and rounding, their resource bounds, and final
