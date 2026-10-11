@@ -10,6 +10,7 @@ import Lax455465Proofs.RationalDistances
 import Lax455465Proofs.RegionBudget
 import Lax455465Proofs.RegionCell
 import Lax455465Proofs.RegionInterval
+import Lax455465Proofs.RegionSearch
 import Lax455465Proofs.RegionThresholds
 import Lax455465Proofs.RegionVolume
 import Lax455465Proofs.ThresholdRounding
