@@ -122,7 +122,14 @@ are implemented with exact execution proofs. A sufficient host width is
 linear in the virtual width, source time, input length, and fixed program
 allowance, and works at every larger host width.
 
-The ordinary algorithm still needs native flow-LP construction and rounding,
+The flat numerical flow-LP encoding is proved equal to the public LP input
+encoding, including zero dimensions. Fixed native commands compute its
+dimensions, row and column indices, and every matrix coefficient. The
+coefficient execution proof includes all conservation signs, equal endpoints,
+self-loops, and exact normalized products of two input weights.
+
+The ordinary algorithm still needs the complete native flow-LP construction
+loops and rounding,
 their remaining resource bounds, and final composition. The separate
 short-path construction is open.
 
