@@ -172,7 +172,12 @@ with uniform polynomial resources. Native strict-ball masks and masked mass
 sums are proved to match the region-selection expressions, including
 threshold equality and zero-weight vertices. Coordinatewise products
 implement residual mask intersection and weighting without changing source
-buffers.
+buffers. Runtime endpoint masks and capacity sums now compute both boundary
+orientations exactly, including threshold equality. A fixed command
+initializes every vertex as active and reconstructs residual capacities and
+weights from the original graph and current membership flags. These
+reconstructed arrays match the residual graph in the region-loop proof, and
+their coordinate heights stay bounded by those of the original input.
 
 The ordinary algorithm still needs malformed-input guards, the remaining
 native region loop and cut rounding, their resource bounds, and final
@@ -226,14 +231,16 @@ The compiled RAM checks run from standard zero memory and verify exact
 certificate-coordinate conversion, min-plus updates, full Floyd–Warshall
 execution, initialization from decoded dual coordinates, clipped edge
 volumes, rational sums, root-distance vectors, metric costs, strict ball
-membership, masked masses, first-match scans, residual mask products, zero dimensions,
+membership, masked masses, both boundary orientations, active initialization,
+residual graph reconstruction, first-match scans, mask products, zero dimensions,
 large rational words, and termination within the
 stated fuel. Each check lists its physical input and expected output in
 `checks/CertificateDecode.lean`, `checks/MinPlus.lean`, or
 `checks/FloydWarshall.lean`, `checks/DualDistances.lean`,
 `checks/RegionArithmetic.lean`, `checks/EdgePortion.lean`,
 `checks/RootDistances.lean`, `checks/MetricCost.lean`, `checks/BallMass.lean`,
-`checks/Find.lean`, and `checks/ProductVector.lean`. The harness compiles
+`checks/Boundary.lean`, `checks/Residual.lean`, `checks/Find.lean`, and
+`checks/ProductVector.lean`. The harness compiles
 the native command to the registered word RAM; it does not substitute a host
 implementation of the decoder.
 
