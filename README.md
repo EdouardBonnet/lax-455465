@@ -55,9 +55,20 @@ doubles the product volume along its actual rational candidate list. The
 computable finite threshold search is proved to return a successful positive
 radius within its prescribed budget, for either computed orientation.
 
-The ordinary algorithm still needs the region-growing construction with
-its logarithmic guarantee and the RAM implementation and composition of
-the reduction and rounding stages. The short-path construction is open.
+Sorting arbitrary rational potentials now produces the actual finite layers
+used by the sweep, preserving all potential differences. The region
+selection compares the two residual ball masses and strictly decreases the
+positive-weight support. Its non-seed volume is bounded by the decrease in
+residual length cost, giving total boundary charge at most 2 beta W with
+seed W/p and at most p removals. The large-ball branch constructs a rational
+potential with separation at least 1/6 and returns a cut of ratio at most
+6W by the actual finite sweep. For the ordered-region branch, every cut
+between region positions is bounded by the sum of the chosen removal
+boundaries, charging each crossing arc at its earliest removed endpoint.
+
+The ordinary algorithm still needs the ordered-region partition and its
+balanced cut, followed by the RAM implementation and composition of the
+reduction and rounding stages. The short-path construction is open.
 
 ## Conventions and dependencies
 
