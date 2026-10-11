@@ -74,16 +74,16 @@ is `Lax808846`, pinned transitively to
 `https://github.com/lax-archive/lax-submissions`, commit
 `9394e531cc51cb67a0214bca3f9264dfe97ba5c7`, folder `word-ram/concepts`.
 
-The LP development `lax-109476` is reused as a local sibling while it is
-still a draft. It must be registered and the sibling requires replaced
-with its immutable git pins before strict archive submission. Local
-iteration therefore uses `lax build --nonstrict`; strict builds must not
-silently accept this draft dependency.
+The registered LP development `lax-109476` supplies its public concepts and
+proved exact solver. Both packages are pinned to
+`https://github.com/EdouardBonnet/lax-109476`, commit
+`0a042604c7ae1ef4cd9a4c7d82eb902f313d4864`, folders `concepts` and `proofs`.
+The dependency uses the registered source in strict archive validation.
 
 ## Validation
 
 ```sh
-lax build /home/ebonnet/Bitbucket/lax/leighton-rao --nonstrict --replay
+lax build /home/ebonnet/Bitbucket/lax/leighton-rao --replay
 ```
 
 Build artifacts use the existing shared mathlib and RAM dependencies.
