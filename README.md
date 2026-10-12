@@ -195,6 +195,13 @@ records its first accepted candidate, and a final query restores that
 candidate’s exact masks, orientation, boundary, and volume. The recorded
 choice is connected to the mathematical region-search function.
 
+Native initialization now sums the original vertex weights and counts
+their positive support from the canonical input buffer. Repeated integer
+halving computes the finite logarithmic grid budget. Exact rational
+operations then derive the seed, radius budget, slope, and grid step from
+this support, total weight, and existing metric cost. Their execution and
+intermediate coordinate-height bounds are proved.
+
 The ordinary algorithm still needs malformed-input guards, the remaining
 native region loop and cut rounding, their resource bounds, and final
 composition. The separate short-path construction is open.
@@ -251,6 +258,8 @@ membership, masked masses, both boundary orientations, active initialization,
 residual graph reconstruction, root selection, complete seeded volumes,
 mass-based orientation selection, complete radius-acceptance queries, grid/event candidate generation,
 first-success radius search and restoration of the selected query,
+positive-support counting, integer budget computation, exact growth constants,
+and their combined initialization,
 first-match scans, mask products, zero dimensions,
 large rational words, and termination within the
 stated fuel. Each check lists its physical input and expected output in
@@ -261,6 +270,8 @@ stated fuel. Each check lists its physical input and expected output in
 `checks/Boundary.lean`, `checks/Residual.lean`, `checks/Root.lean`,
 `checks/Volume.lean`, `checks/RegionDirection.lean`, `checks/RegionQuery.lean`,
 `checks/RadiusCandidates.lean`, `checks/RadiusSearch.lean`,
+`checks/SupportBudget.lean`, `checks/RoundingConstants.lean`,
+`checks/RoundingInit.lean`,
 `checks/Find.lean`, and
 `checks/ProductVector.lean`. The harness compiles
 the native command to the registered word RAM; it does not substitute a host

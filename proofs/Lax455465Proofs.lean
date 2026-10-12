@@ -82,6 +82,7 @@ import Lax455465Proofs.RamFrames
 import Lax455465Proofs.RamGraphDimensions
 import Lax455465Proofs.RamGraphHeader
 import Lax455465Proofs.RamGraphInput
+import Lax455465Proofs.RamGridBudget
 import Lax455465Proofs.RamGridRadius
 import Lax455465Proofs.RamHostBounds
 import Lax455465Proofs.RamInputCopy
@@ -101,6 +102,7 @@ import Lax455465Proofs.RamMetricIndices
 import Lax455465Proofs.RamMetricPivot
 import Lax455465Proofs.RamMinPlus
 import Lax455465Proofs.RamMinimum
+import Lax455465Proofs.RamNatScalar
 import Lax455465Proofs.RamOptimalDecode
 import Lax455465Proofs.RamPolynomial
 import Lax455465Proofs.RamProductSum
@@ -118,11 +120,17 @@ import Lax455465Proofs.RamRegionQuery
 import Lax455465Proofs.RamResidual
 import Lax455465Proofs.RamRoot
 import Lax455465Proofs.RamRootDistances
+import Lax455465Proofs.RamRoundingConstants
+import Lax455465Proofs.RamRoundingInit
 import Lax455465Proofs.RamScalarBinary
 import Lax455465Proofs.RamScalarComparison
+import Lax455465Proofs.RamScalarInverse
+import Lax455465Proofs.RamScalarProduct
+import Lax455465Proofs.RamScalarReciprocal
 import Lax455465Proofs.RamSelectedRegion
 import Lax455465Proofs.RamSparseMemory
 import Lax455465Proofs.RamSparseRead
+import Lax455465Proofs.RamSupport
 import Lax455465Proofs.RamTransfer
 import Lax455465Proofs.RamTruncatedSubtract
 import Lax455465Proofs.RamUniformFlowLp
@@ -182,9 +190,12 @@ import Lax455465Proofs.RegisteredLpInvocation
 import Lax455465Proofs.RegisteredLpNative
 import Lax455465Proofs.ResidualData
 import Lax455465Proofs.RootData
+import Lax455465Proofs.RoundingConstantHeight
+import Lax455465Proofs.RoundingConstants
 import Lax455465Proofs.SetDistances
 import Lax455465Proofs.SparseBounds
 import Lax455465Proofs.SparseRam
+import Lax455465Proofs.SupportData
 import Lax455465Proofs.ThresholdRounding
 import Lax455465Proofs.UndirectedConversion
 import Lax455465Proofs.UnsignedHeight
