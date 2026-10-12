@@ -6,7 +6,7 @@ in the binary encoding size of the rational input and returns a positive-demand
 cut and an exact rational concurrent flow satisfying
 $\operatorname{ratio}(S)\le C\log_2(p)f$, where $p$ is the number of
 positive-weight vertices. Directed, undirected, and uniform variants are
-corollaries of this common guarantee. Public arc-to-path conversion gives the
+corollaries of this common guarantee. Arc-to-path conversion over real flows gives the
 classical bound $\operatorname{sparsestCut}\le C\log_2(p)\operatorname{maxFlow}$.
 
 The submission also includes the deterministic uniform short-path flow
