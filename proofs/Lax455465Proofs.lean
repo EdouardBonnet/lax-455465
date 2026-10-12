@@ -54,6 +54,7 @@ import Lax455465Proofs.RamArrayCopy
 import Lax455465Proofs.RamArrayProduct
 import Lax455465Proofs.RamArrayScalar
 import Lax455465Proofs.RamArraySum
+import Lax455465Proofs.RamAutomaticLayout
 import Lax455465Proofs.RamBallMask
 import Lax455465Proofs.RamBallMass
 import Lax455465Proofs.RamBestFold
@@ -63,6 +64,12 @@ import Lax455465Proofs.RamBooleanArithmetic
 import Lax455465Proofs.RamBooleanVector
 import Lax455465Proofs.RamBoundary
 import Lax455465Proofs.RamCertificateVector
+import Lax455465Proofs.RamClockInput
+import Lax455465Proofs.RamClockPolynomial
+import Lax455465Proofs.RamClockPrepare
+import Lax455465Proofs.RamClockTotal
+import Lax455465Proofs.RamClockedExecution
+import Lax455465Proofs.RamClockedLoop
 import Lax455465Proofs.RamComparison
 import Lax455465Proofs.RamCutMeasures
 import Lax455465Proofs.RamCutRatio
@@ -142,6 +149,7 @@ import Lax455465Proofs.RamPositiveRounding
 import Lax455465Proofs.RamPotentialAverage
 import Lax455465Proofs.RamPotentialChoice
 import Lax455465Proofs.RamPotentialSweep
+import Lax455465Proofs.RamProductAlgorithm
 import Lax455465Proofs.RamProductSum
 import Lax455465Proofs.RamProductVector
 import Lax455465Proofs.RamRadiusCandidates
@@ -205,6 +213,7 @@ import Lax455465Proofs.RamUnsignedEncoding
 import Lax455465Proofs.RamUnsignedScalar
 import Lax455465Proofs.RamUnsignedSum
 import Lax455465Proofs.RamUnsignedVector
+import Lax455465Proofs.RamValidCompilation
 import Lax455465Proofs.RamValidFlowCut
 import Lax455465Proofs.RamVectorEncoding
 import Lax455465Proofs.RamVirtualArithmetic
@@ -271,6 +280,7 @@ import Lax455465Proofs.RuntimeCutCertificate
 import Lax455465Proofs.SetDistanceData
 import Lax455465Proofs.SetDistances
 import Lax455465Proofs.SparseBounds
+import Lax455465Proofs.SparseClock
 import Lax455465Proofs.SparseRam
 import Lax455465Proofs.SupportData
 import Lax455465Proofs.ThresholdCutData

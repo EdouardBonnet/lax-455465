@@ -26,18 +26,20 @@ other approximation problems are outside this submission.
 
 | Statement | Status | Public proof dependency |
 | --- | --- | --- |
-| `RamProductFlowCut` | Open | — |
-| `RamDirectedSparsestCut` | Conditional proof | `RamProductFlowCut` |
-| `RamUndirectedSparsestCut` | Conditional proof | `RamProductFlowCut` |
-| `RamDirectedUniformFlowCut` | Conditional proof | `RamDirectedSparsestCut` |
-| `RamUniformFlowCut` | Conditional proof | `RamUndirectedSparsestCut` |
+| `RamProductFlowCut` | Proved | Registered LP solver |
+| `RamDirectedSparsestCut` | Proved | `RamProductFlowCut` |
+| `RamUndirectedSparsestCut` | Proved | `RamProductFlowCut` |
+| `RamDirectedUniformFlowCut` | Proved | `RamDirectedSparsestCut` |
+| `RamUniformFlowCut` | Proved | `RamUndirectedSparsestCut` |
 | `RamUniformShortPathFlow` | Open | — |
 
 These are six algorithmic statements and five definition concepts. The
-conditional proofs preserve one program, one universal approximation
-constant, and the same joint output. The core algorithm and short-path
-algorithm are not yet discharged from background axioms. No `sorry` or
-`admit` is used. Lax concept axioms represent the open statements.
+four corollaries preserve one program, one universal approximation
+constant, and the same joint output. The product algorithm and its four
+variants have complete registered proofs; the separate short-path algorithm
+remains open. No `sorry` or `admit` is used. Lax concept axioms represent
+the public statements; the proof network distinguishes the open short-path
+statement from the proved algorithms.
 
 The proof package's directed-flow LP uses n⁴+1 nonnegative variables and
 n²+2n³ inequalities. Its capacity and conservation constraints encode arc
@@ -256,9 +258,16 @@ computes the metric, rounds a cut, and emits exactly the certificate proved
 valid. Both instruction count and sufficient word width are bounded by fixed
 polynomials in the original binary input size. These bounds include all
 rounding branches and output normalization. The LP interpreter is proved to
-keep its intermediate output private. The public solver theorem still needs
-total execution on arbitrary input words and the final compiler transfer.
-The separate short-path construction is open.
+keep its intermediate output private.
+
+The public solver theorem is now proved in `RamProductAlgorithm`. A bounded
+interpreter computes the virtual width and execution clock from the actual
+binary input size, using fixed Horner programs. It always terminates, even
+on malformed inputs or nonterminating source computations. On valid inputs
+the clock covers the complete compiled pipeline and preserves its exact
+certificate output. Uniform polynomial word and instruction bounds include
+this simulation and the final compiler transfer. The four public variants
+are corollaries of this theorem. The separate short-path construction is open.
 
 ## Conventions and dependencies
 
@@ -289,7 +298,8 @@ RAM compiler and its execution/resource interface, pinned to the same
 This compiler is implementation infrastructure; the LP solver remains a
 public concept dependency.
 
-`RamArithmetic`, `RamRational`, `RamComparison`, and `RamTransfer` reuse
+`RamArithmetic`, `RamRational`, `RamComparison`, `RamTransfer`, and
+`RamAutomaticLayout` reuse
 generic RAM utilities from the registered LP source at
 `0a042604c7ae1ef4cd9a4c7d82eb902f313d4864`, under its Apache-2.0 license.
 Their namespaces and local imports are adapted. Each file records the
@@ -320,9 +330,12 @@ and mask restoration, distances to and from sets, weighted potential selection,
 the complete large-ball, zero-cost, and history-based cut branches, and the
 combined metric-rounding program. Eight joint-output checks cover both edge
 models, canonical fraction reduction, zero coordinates, and boundary dimensions.
+Eleven bounded-interpreter checks exercise zero clocks, nontermination,
+truncated output, all three source halt conditions, arbitrary logical inputs,
+virtual wraparound at two host widths, and binary-size-dependent clocks.
 Every check gives its physical input
 and expected output as an executable assertion in `checks/`; the single script
-above runs all 36 suites. The harness compiles each native command to the
+above runs all 37 suites. The harness compiles each native command to the
 registered word RAM and checks termination within its stated fuel.
 
 Build artifacts use the existing shared mathlib and RAM dependencies.
