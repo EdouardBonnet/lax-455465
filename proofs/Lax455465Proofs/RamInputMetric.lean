@@ -16,7 +16,7 @@ polynomial resources from the physical source graph alone. The metric and
 flow buffers contain the actual decoded witnesses, not chosen oracle data. -/
 theorem exists_program :
     ∃ (c : Com) (timeBound wordBound sourceTime sourceWord : Polynomial ℕ),
-      ∀ {n : ℕ} (kind : EdgeKind) (I : RationalInstance n), 2 ≤ supportCount I.weights →
+      c.NoWrite ∧ ∀ {n : ℕ} (kind : EdgeKind) (I : RationalInstance n), 2 ≤ supportCount I.weights →
         ∃ (z : Fin (columns n) → ℚ) (y : Fin (rows n) → ℚ)
           (hz : PrimalFeasible (program I) z) (hy : DualFeasible (program I) y),
           primalValue (program I) z = dualValue (program I) y ∧
@@ -39,12 +39,12 @@ theorem exists_program :
                 Prefix (RamUnsignedBuffer.encode (RamOptimalDecode.vector y hy.1)) "flow.dual" τ ∧
                 Prefix (RamUnsignedBuffer.encode (MetricMatrix.values (RamDualDistances.result y hy.1))) "metric.old" τ)
               (timeBound.eval (bitSize (encodeInput kind I))) := by
-  obtain ⟨c,T,WB,TB,sourceWord,hsolver⟩ := RamInputOptimal.exists_program
+  obtain ⟨c,T,WB,TB,sourceWord,hnoWrite,hsolver⟩ := RamInputOptimal.exists_program
   let initTime : Polynomial ℕ := Polynomial.C 62*(Polynomial.X+Polynomial.C 1)^3
   let words : Polynomial ℕ := WB+Polynomial.C 2*FlowDistanceBounds.widthBound sourceWord+
     LpInputSize.sizeBound+Polynomial.C 20
   refine ⟨.seq c RamDualDistances.command,T+RamDistanceResources.timeBound sourceWord+initTime,
-    words,TB,sourceWord,?_⟩
+    words,TB,sourceWord,⟨hnoWrite,by decide⟩,?_⟩
   intro n kind I hp
   obtain ⟨z,y,hz,hy,hvalue,hfit,hcorrect⟩ := hsolver kind I hp
   refine ⟨z,y,hz,hy,hvalue,hfit,?_⟩

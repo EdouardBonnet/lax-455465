@@ -245,9 +245,19 @@ The initialization, zero-cost dispatch, full region loop, terminal-state
 dispatch, and cut construction are composed in one native execution theorem.
 A separate bridge proves that the actual resulting cut and matching LP primal
 coordinates satisfy the public joint-certificate predicate, for both directed
-and undirected capacities. This does not yet prove the public solver theorem:
-joint certificate emission, total execution on malformed inputs, aggregate
-polynomial resource bounds, and final LP-to-output composition remain.
+and undirected capacities. The native certificate writer is also proved to
+emit the exact public encoding: one bit per cut vertex, then the flow value
+and all arc amounts in their specified order. Undirected conversion halves
+only the arc amounts and reduces every fraction canonically.
+
+The full valid-input pipeline is now composed in `RamValidFlowCut.exists_program`:
+one fixed native command reads the graph, constructs and solves its LP,
+computes the metric, rounds a cut, and emits exactly the certificate proved
+valid. Both instruction count and sufficient word width are bounded by fixed
+polynomials in the original binary input size. These bounds include all
+rounding branches and output normalization. The LP interpreter is proved to
+keep its intermediate output private. The public solver theorem still needs
+total execution on arbitrary input words and the final compiler transfer.
 The separate short-path construction is open.
 
 ## Conventions and dependencies
@@ -308,9 +318,11 @@ mask products, zero dimensions, and large rational words. The cut suites also
 check both threshold orientations, exact cut scores, minimum-ratio selection
 and mask restoration, distances to and from sets, weighted potential selection,
 the complete large-ball, zero-cost, and history-based cut branches, and the
-combined metric-rounding program. Every check gives its physical input
+combined metric-rounding program. Eight joint-output checks cover both edge
+models, canonical fraction reduction, zero coordinates, and boundary dimensions.
+Every check gives its physical input
 and expected output as an executable assertion in `checks/`; the single script
-above runs all 35 suites. The harness compiles each native command to the
+above runs all 36 suites. The harness compiles each native command to the
 registered word RAM and checks termination within its stated fuel.
 
 Build artifacts use the existing shared mathlib and RAM dependencies.

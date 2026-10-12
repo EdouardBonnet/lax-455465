@@ -13,7 +13,7 @@ open scoped NNRat
 Its only initialized mathematical input is the physical graph tape. -/
 theorem exists_program :
     ∃ (c : Com) (timeBound wordBound sourceTime sourceWord : Polynomial ℕ),
-      ∀ {n : ℕ} (kind : EdgeKind) (I : RationalInstance n), 2 ≤ supportCount I.weights →
+      c.NoWrite ∧ ∀ {n : ℕ} (kind : EdgeKind) (I : RationalInstance n), 2 ≤ supportCount I.weights →
         ∃ (z : Fin (columns n) → ℚ) (y : Fin (rows n) → ℚ)
           (hz : PrimalFeasible (program I) z) (hy : DualFeasible (program I) y),
           primalValue (program I) z = dualValue (program I) y ∧
@@ -35,10 +35,10 @@ theorem exists_program :
                 Prefix (Lax109476.RationalEncoding.encodeCertificate (.optimal z y)) "vm.output" τ ∧
                 τ.vars "cert.cursor" = 1+3*columns n+3*rows n)
               (timeBound.eval (bitSize (encodeInput kind I))) := by
-  obtain ⟨c,T,WB,TB,sourceWord,hsolver⟩ := RamInputFlowLp.exists_program
+  obtain ⟨c,T,WB,TB,sourceWord,hnoWrite,hsolver⟩ := RamInputFlowLp.exists_program
   let extra : Polynomial ℕ := Polynomial.C 39*LpInputSize.sizeBound+Polynomial.C 22
   let words : Polynomial ℕ := WB+LpInputSize.sizeBound+Polynomial.C 10
-  refine ⟨.seq c RamOptimalDecode.command,T+extra,words,TB,sourceWord,?_⟩
+  refine ⟨.seq c RamOptimalDecode.command,T+extra,words,TB,sourceWord,⟨hnoWrite,by decide⟩,?_⟩
   intro n kind I hp
   obtain ⟨certificate,hvalid,hfit,hcorrect⟩ := hsolver kind I
   obtain ⟨z,y,hcertificate,hz,hy,hvalue⟩ := FlowOptimalCertificate.optimal I hp certificate hvalid

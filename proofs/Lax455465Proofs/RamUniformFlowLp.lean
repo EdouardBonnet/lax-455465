@@ -1,5 +1,5 @@
 import Lax455465Proofs.RamFlowHostWidth
-import Lax455465Proofs.RamLpScope
+import Lax455465Proofs.RamLpNoWrite
 
 namespace Lax455465Proofs.RamUniformFlowLp
 
@@ -13,7 +13,7 @@ instruction and word bounds, chosen before all input dimensions and data.
 Reserved array extents are proof bookkeeping, not initialized oracle data. -/
 theorem exists_program :
     ∃ (c : Com) (timeBound wordBound sourceTime sourceWord : Polynomial ℕ),
-      ∀ {n : ℕ} (kind : Lax455465.ProductNetwork.EdgeKind) (I : RationalInstance n),
+      c.NoWrite ∧ ∀ {n : ℕ} (kind : Lax455465.ProductNetwork.EdgeKind) (I : RationalInstance n),
         ∃ certificate : Certificate (rows n) (columns n),
           IsValidCertificate (program I) certificate ∧
           FitsInWords (sourceWord.eval (bitSize (Lax109476.RationalEncoding.encodeProgram (program I))))
@@ -31,7 +31,7 @@ theorem exists_program :
                 τ.vars "vm.running" = 0) (timeBound.eval (bitSize (encodeInput kind I))) := by
   obtain ⟨p,WB,TB,coefficients,hsolve⟩ := RamFlowLpSolver.exists_program
   refine ⟨RamFlowLpSolver.command p coefficients,RamFlowSolverBounds.timeBound p coefficients TB,
-    RamFlowHostWidth.wordBound p WB TB,TB,WB,?_⟩
+    RamFlowHostWidth.wordBound p WB TB,TB,WB,RamLpNoWrite.solver p coefficients,?_⟩
   intro n kind I
   obtain ⟨certificate,hvalid,hfit,hcorrect⟩ := hsolve I
   refine ⟨certificate,hvalid,hfit,?_⟩

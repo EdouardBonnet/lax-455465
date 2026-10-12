@@ -15,7 +15,7 @@ computes their exact shortest-distance metric, and sums its metric cost
 from the physical source graph, with uniform polynomial resources. -/
 theorem exists_program :
     ∃ (c : Com) (timeBound wordBound sourceTime sourceWord : Polynomial ℕ),
-      ∀ {n : ℕ} (kind : EdgeKind) (I : RationalInstance n), 2 ≤ supportCount I.weights →
+      c.NoWrite ∧ ∀ {n : ℕ} (kind : EdgeKind) (I : RationalInstance n), 2 ≤ supportCount I.weights →
         ∃ (z : Fin (columns n) → ℚ) (y : Fin (rows n) → ℚ)
           (hz : PrimalFeasible (program I) z) (hy : DualFeasible (program I) y),
           primalValue (program I) z = dualValue (program I) y ∧
@@ -39,10 +39,10 @@ theorem exists_program :
                 Prefix (RamUnsignedBuffer.encode (MetricMatrix.values (RamDualDistances.result y hy.1))) "metric.old" τ ∧
                 RamUnsignedScalar.Stored "round.cost" (MetricCostData.cost I (RamDualDistances.result y hy.1)) τ)
               (timeBound.eval (bitSize (encodeInput kind I))) := by
-  obtain ⟨c,T,WB,TB,sourceWord,hsolver⟩ := RamInputMetric.exists_program
+  obtain ⟨c,T,WB,TB,sourceWord,hnoWrite,hsolver⟩ := RamInputMetric.exists_program
   let P := FlowDistanceBounds.widthBound sourceWord
   refine ⟨.seq c RamMetricCost.command,T+RamMetricCostResources.timeBound P,
-    WB+RamMetricCostResources.wordBound P,TB,sourceWord,?_⟩
+    WB+RamMetricCostResources.wordBound P,TB,sourceWord,⟨hnoWrite,by decide⟩,?_⟩
   intro n kind I hp
   obtain ⟨z,y,hz,hy,hvalue,hfit,hcorrect⟩ := hsolver kind I hp
   refine ⟨z,y,hz,hy,hvalue,hfit,?_⟩

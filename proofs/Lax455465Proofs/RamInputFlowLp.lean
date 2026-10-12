@@ -21,7 +21,7 @@ exact flow LP, and obtains a valid certificate from the registered solver.
 No graph dimensions, coefficients, or certificate coordinates are preloaded. -/
 theorem exists_program :
     ∃ (c : Com) (timeBound wordBound sourceTime sourceWord : Polynomial ℕ),
-      ∀ {n : ℕ} (kind : EdgeKind) (I : RationalInstance n),
+      c.NoWrite ∧ ∀ {n : ℕ} (kind : EdgeKind) (I : RationalInstance n),
         ∃ certificate : Certificate (rows n) (columns n),
           IsValidCertificate (program I) certificate ∧
           FitsInWords (sourceWord.eval (bitSize (Lax109476.RationalEncoding.encodeProgram (program I))))
@@ -40,10 +40,10 @@ theorem exists_program :
                 Prefix (Lax109476.RationalEncoding.encodeCertificate certificate) "vm.output" τ ∧
                 τ.vars "vm.outputLength" = (Lax109476.RationalEncoding.encodeCertificate certificate).length ∧
                 τ.vars "vm.running" = 0) (timeBound.eval (bitSize (encodeInput kind I))) := by
-  obtain ⟨c,T,WB,TB,sourceWord,hsolver⟩ := RamUniformFlowLp.exists_program
+  obtain ⟨c,T,WB,TB,sourceWord,hnoWrite,hsolver⟩ := RamUniformFlowLp.exists_program
   let parsing : Polynomial ℕ := Polynomial.C 200*(Polynomial.X+Polynomial.C 1)^2
   let words : Polynomial ℕ := WB+LpInputSize.sizeBound+Polynomial.X+Polynomial.C 10
-  refine ⟨.seq RamInputCopy.copy (.seq RamGraphInput.command c),T+parsing,words,TB,sourceWord,?_⟩
+  refine ⟨.seq RamInputCopy.copy (.seq RamGraphInput.command c),T+parsing,words,TB,sourceWord,⟨by decide,by decide,hnoWrite⟩,?_⟩
   intro n kind I
   obtain ⟨certificate,hvalid,hfit,hcorrect⟩ := hsolver kind I
   refine ⟨certificate,hvalid,hfit,?_⟩
