@@ -267,7 +267,20 @@ on malformed inputs or nonterminating source computations. On valid inputs
 the clock covers the complete compiled pipeline and preserves its exact
 certificate output. Uniform polynomial word and instruction bounds include
 this simulation and the final compiler transfer. The four public variants
-are corollaries of this theorem. The separate short-path construction is open.
+are corollaries of this theorem.
+
+The mathematical short-path theorem is proved in
+`ShortPathExistence.certificate_exists`, with constants 32768 and 8192.
+The layered LP shares each undirected capacity across all layers. A capped
+distance relaxation, coarea contraction, and large-ball argument give the
+dual lower bound. Scanning layer budgets uses only LP values and the maximum
+incident capacity; it does not need to compute the sparsest cut. Cycle
+erasure handles the full-length fallback. Bottleneck subtraction decomposes
+the chosen layered flow into rational paths; projection and cycle erasure
+preserve capacities, demands, and the length bound. The resulting certificate
+has at most `n*n*(n^4+1)` path records. This proof uses the registered LP
+solver concept. The short-path RAM implementation, its execution/resource
+proofs, and registration of the public algorithmic theorem remain open.
 
 ## Conventions and dependencies
 
