@@ -234,9 +234,21 @@ and sweeps it. Its execution proof returns an admissible cut of zero ratio
 when the metric cost is zero, including directed instances where the first
 positive-weight vertex has no positive outgoing distance.
 
-The ordinary algorithm still needs the history-based cut branch, joint
-certificate output, malformed-input guards, full resource bounds, and final
-composition. The separate short-path construction is open.
+The history-based cut branch now has a complete native execution proof. It
+reads each recorded directed ball, assigns every vertex to its earliest
+containing region, and computes the integer ordering positions. An upper
+threshold sweep returns an admissible cut with the bound from the telescoping
+history proof. Overlapping balls, ties, and unremoved vertices retain the
+ordering required for directed capacities.
+
+The initialization, zero-cost dispatch, full region loop, terminal-state
+dispatch, and cut construction are composed in one native execution theorem.
+A separate bridge proves that the actual resulting cut and matching LP primal
+coordinates satisfy the public joint-certificate predicate, for both directed
+and undirected capacities. This does not yet prove the public solver theorem:
+joint certificate emission, total execution on malformed inputs, aggregate
+polynomial resource bounds, and final LP-to-output composition remain.
+The separate short-path construction is open.
 
 ## Conventions and dependencies
 
@@ -295,9 +307,10 @@ their combined initialization, complete region-loop execution, first-match scans
 mask products, zero dimensions, and large rational words. The cut suites also
 check both threshold orientations, exact cut scores, minimum-ratio selection
 and mask restoration, distances to and from sets, weighted potential selection,
-and the complete large-ball and zero-cost cut branches. Every check gives its physical input
+the complete large-ball, zero-cost, and history-based cut branches, and the
+combined metric-rounding program. Every check gives its physical input
 and expected output as an executable assertion in `checks/`; the single script
-above runs all 33 suites. The harness compiles each native command to the
+above runs all 35 suites. The harness compiles each native command to the
 registered word RAM and checks termination within its stated fuel.
 
 Build artifacts use the existing shared mathlib and RAM dependencies.
