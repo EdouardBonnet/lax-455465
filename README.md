@@ -15,11 +15,17 @@ positive-demand cut and a feasible rational concurrent arc flow, with cut ratio
 at most a universal constant times log₂(p) times the returned flow value.
 Here p counts the positive-weight vertices. Four variants specialize this
 single algorithm and retain its program and exact output guarantees.
+The public arc-to-path conversion preserves the common value and does not
+increase any arc load, connecting these certificates to the classical bound
+`sparsestCut ≤ C log₂(p) maxFlow`. Here `maxFlow` is the existing supremum
+over real-valued simple-path flows. The conversion itself allows arbitrary
+real capacities, weights, and flows; the flow–cut corollary retains the
+algorithm's rational-input scope.
 
 The uniform short-path construction of Theorem 18 remains a separate
 algorithmic statement: its additional path-length bound does not follow
 from the ordinary flow–cut guarantee. Matching lower-bound examples,
-nonalgorithmic statements for arbitrary real inputs, and applications to
+flow–cut bounds for arbitrary real inputs, and applications to
 other approximation problems are outside this submission.
 
 ## Proof status
@@ -27,16 +33,24 @@ other approximation problems are outside this submission.
 | Statement | Status | Public proof dependency |
 | --- | --- | --- |
 | `RamProductFlowCut` | Proved | Registered LP solver |
+| `ArcToPath` | Proved | None |
+| `ProductFlowCut` | Proved | `RamProductFlowCut`, `ArcToPath` |
 | `RamDirectedSparsestCut` | Proved | `RamProductFlowCut` |
 | `RamUndirectedSparsestCut` | Proved | `RamProductFlowCut` |
 | `RamDirectedUniformFlowCut` | Proved | `RamDirectedSparsestCut` |
 | `RamUniformFlowCut` | Proved | `RamUndirectedSparsestCut` |
 | `RamUniformShortPathFlow` | Proved | Registered LP solver |
 
-These are six algorithmic statements and five definition concepts. The
+These are six algorithmic statements, two supporting lemmas, and
+five definition concepts. The
 four corollaries preserve one program, one universal approximation
 constant, and the same joint output. All six public algorithmic statements
 have complete registered proof wrappers. No `sorry` or `admit` is used.
+Both new lemmas also have complete registered proof wrappers: conservation
+first gives a positive route, repeated bottleneck subtraction decomposes each
+commodity into simple paths, and their sum respects both capacity models.
+The classical corollary bounds the feasible-value set before using its
+supremum and uses an admissible returned cut to bound the cut infimum.
 The short-path algorithm has its own proof chain through the registered
 exact LP solver; its stronger length guarantee is proved independently of
 the ordinary product flow–cut algorithm.
