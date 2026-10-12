@@ -211,12 +211,32 @@ history and removes precisely its selected ball, preserving earlier records
 and original graph data. A fixed bounded loop composes these iterations;
 compiled checks exercise both large-ball termination and exhaustion through
 small balls. The typed loop invariant and support-decrease proofs bound every
-iteration and show that the final state cannot still be running. Connecting
-the final state to the cut-rounding output and assembling the global
-polynomial resource bounds remain open.
+iteration and show that the final state cannot still be running. The complete
+native loop now yields either the mathematical large-ball guarantee or a
+valid exhausted history of at most the support-budget length.
 
-The ordinary algorithm still needs malformed-input guards, final cut
-rounding, full resource bounds, and final composition. The separate short-path construction is open.
+The native threshold sweep computes every cut's exact capacity, product demand,
+and ratio, skips inadmissible shores, and retains the first minimum-ratio
+candidate. It restores the winning vertex mask after the scan. Its execution
+proof transfers bounds from the mathematical sorted-layer sweep, including
+repeated potential values and reversed potentials.
+
+The complete large-ball cut branch is now proved in RAM. It computes distances
+to and from the two ball masks, compares their original-weight averages,
+constructs the chosen potential, and sweeps it. The resulting actual cut mask
+has positive demand and ratio at most six times the metric cost. Set-distance
+coordinates retain the height of an original metric entry; common-denominator
+bounds control the weighted averages and cut scores.
+
+The native zero-cost branch searches all ordered pairs for positive weights
+and positive directed distance, extracts the selected source's distance vector,
+and sweeps it. Its execution proof returns an admissible cut of zero ratio
+when the metric cost is zero, including directed instances where the first
+positive-weight vertex has no positive outgoing distance.
+
+The ordinary algorithm still needs the history-based cut branch, joint
+certificate output, malformed-input guards, full resource bounds, and final
+composition. The separate short-path construction is open.
 
 ## Conventions and dependencies
 
@@ -271,22 +291,13 @@ residual graph reconstruction, root selection, complete seeded volumes,
 mass-based orientation selection, complete radius-acceptance queries, grid/event candidate generation,
 first-success radius search and restoration of the selected query,
 positive-support counting, integer budget computation, exact growth constants,
-and their combined initialization,
-first-match scans, mask products, zero dimensions,
-large rational words, and termination within the
-stated fuel. Each check lists its physical input and expected output in
-`checks/CertificateDecode.lean`, `checks/MinPlus.lean`, or
-`checks/FloydWarshall.lean`, `checks/DualDistances.lean`,
-`checks/RegionArithmetic.lean`, `checks/EdgePortion.lean`,
-`checks/RootDistances.lean`, `checks/MetricCost.lean`, `checks/BallMass.lean`,
-`checks/Boundary.lean`, `checks/Residual.lean`, `checks/Root.lean`,
-`checks/Volume.lean`, `checks/RegionDirection.lean`, `checks/RegionQuery.lean`,
-`checks/RadiusCandidates.lean`, `checks/RadiusSearch.lean`,
-`checks/SupportBudget.lean`, `checks/RoundingConstants.lean`,
-`checks/RoundingInit.lean`,
-`checks/Find.lean`, and
-`checks/ProductVector.lean`. The harness compiles
-the native command to the registered word RAM; it does not substitute a host
-implementation of the decoder.
+their combined initialization, complete region-loop execution, first-match scans,
+mask products, zero dimensions, and large rational words. The cut suites also
+check both threshold orientations, exact cut scores, minimum-ratio selection
+and mask restoration, distances to and from sets, weighted potential selection,
+and the complete large-ball and zero-cost cut branches. Every check gives its physical input
+and expected output as an executable assertion in `checks/`; the single script
+above runs all 33 suites. The harness compiles each native command to the
+registered word RAM and checks termination within its stated fuel.
 
 Build artifacts use the existing shared mathlib and RAM dependencies.
