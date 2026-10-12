@@ -1,5 +1,6 @@
 import Lax808846Proofs.Compile
 import Lax808846.Ram
+import Std.Data.HashMap
 
 /-! Shared harness for executing the compiled registered word RAM.
 `none` means fuel exhaustion or termination without the compiler's explicit halt. A successful check therefore verifies
@@ -41,6 +42,39 @@ def runToHalt (width : ℕ) (p : Lax808846.Ram.Program) :
 def executeCompiled (layout : Layout) (width fuel : ℕ)
     (command : Com) (input : List ℕ) : Option (List ℕ) :=
   runToHalt width (compileProgram layout command) fuel
+    (Lax808846.Ram.initState input)
+
+/-- The memory cell changed by an instruction, read from the old state.
+All actual arithmetic, input, output, and control use the registered effect. -/
+def writtenAddress (width : ℕ) (i : Lax808846.Ram.Instr) (s : Lax808846.Ram.State) : Option ℕ :=
+  match i with
+  | .set a _ | .load a _ | .add a _ _ | .sub a _ _ | .mul a _ _
+  | .div a _ _ | .and a _ _ | .shiftl a _ _ | .not a _ | .read a
+  | .inputLength a | .inputLoad a _ => some (a % 2^width)
+  | .store a _ => some (s.mem (a % 2^width) % 2^width)
+  | _ => none
+
+/-- Cache the exact registered memory effect after each instruction.
+This avoids accumulating nested function updates during larger component
+checks; instruction semantics remain `Lax808846.Ram.Instr.effect`. -/
+def runToHaltCached (width : ℕ) (p : Array Lax808846.Ram.Instr) :
+    ℕ → Std.HashMap ℕ ℕ → Lax808846.Ram.State → Option (List ℕ)
+  | 0, _, _ => none
+  | fuel+1, memory, s => match p[s.pc]? with
+    | none => none
+    | some i => match i.effect width s with
+      | none => match i with
+        | .halt => some s.out
+        | _ => none
+      | some t =>
+        let next := match writtenAddress width i s with
+          | none => memory
+          | some a => memory.insert a (t.mem a)
+        runToHaltCached width p fuel next {t with mem := fun a => next.getD a 0}
+
+def executeCompiledCached (layout : Layout) (width fuel : ℕ)
+    (command : Com) (input : List ℕ) : Option (List ℕ) :=
+  runToHaltCached width (compileProgram layout command).toArray fuel {}
     (Lax808846.Ram.initState input)
 
 end Checks

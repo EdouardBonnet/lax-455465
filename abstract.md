@@ -9,7 +9,8 @@ corollaries of this common guarantee.
 
 The submission also includes the deterministic uniform short-path flow
 construction of Theorem 18, with its simultaneous flow-value and path-length
-guarantees. Algorithms use the registered word RAM of
+guarantees. Algorithms use the exact LP solver of
+[lax-109476](https://laxarchive.org/lax-109476/), the registered word RAM of
 [lax-808846](https://laxarchive.org/lax-808846/) and the polynomial-time
 predicate of [lax-759944](https://laxarchive.org/lax-759944/), measured in
 binary rational input size and requiring exact encoded outputs. Matching

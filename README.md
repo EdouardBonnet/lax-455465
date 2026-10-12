@@ -31,15 +31,15 @@ other approximation problems are outside this submission.
 | `RamUndirectedSparsestCut` | Proved | `RamProductFlowCut` |
 | `RamDirectedUniformFlowCut` | Proved | `RamDirectedSparsestCut` |
 | `RamUniformFlowCut` | Proved | `RamUndirectedSparsestCut` |
-| `RamUniformShortPathFlow` | Open | — |
+| `RamUniformShortPathFlow` | Proved | Registered LP solver |
 
 These are six algorithmic statements and five definition concepts. The
 four corollaries preserve one program, one universal approximation
-constant, and the same joint output. The product algorithm and its four
-variants have complete registered proofs; the separate short-path algorithm
-remains open. No `sorry` or `admit` is used. Lax concept axioms represent
-the public statements; the proof network distinguishes the open short-path
-statement from the proved algorithms.
+constant, and the same joint output. All six public algorithmic statements
+have complete registered proof wrappers. No `sorry` or `admit` is used.
+The short-path algorithm has its own proof chain through the registered
+exact LP solver; its stronger length guarantee is proved independently of
+the ordinary product flow–cut algorithm.
 
 The proof package's directed-flow LP uses n⁴+1 nonnegative variables and
 n²+2n³ inequalities. Its capacity and conservation constraints encode arc
@@ -279,8 +279,26 @@ erasure handles the full-length fallback. Bottleneck subtraction decomposes
 the chosen layered flow into rational paths; projection and cycle erasure
 preserve capacities, demands, and the length bound. The resulting certificate
 has at most `n*n*(n^4+1)` path records. This proof uses the registered LP
-solver concept. The short-path RAM implementation, its execution/resource
-proofs, and registration of the public algorithmic theorem remain open.
+solver concept.
+
+The complete native short-path pipeline reads the physical input, computes
+maximum incident capacity, constructs successive layered LPs, and invokes
+the registered solver to select and re-solve the proved layer budget. It
+decodes the actual primal certificate, traverses positive layered paths,
+erases cycles and waits, computes exact bottlenecks, and emits their canonical
+rational records. Each commodity completes within the primal coordinate
+count plus one extraction iterations. Conservation and load invariants prove
+all demands and capacities for the actual output. The denominator lattice
+is a proof invariant that bounds residual heights independently of the number
+of updates; it supplies no initialized RAM data.
+
+`RamShortValidInput.exists_program` composes the entire input-to-certificate
+execution with polynomial word and instruction bounds. Compiler simulation
+starts from standard zero memory. `RamUniformShortPathFlow` adds the bounded
+interpreter used for totality on arbitrary inputs and establishes the registered
+uniform `RamPolytime` predicate. Its constants are 32768 and 8192. The native
+record bound is `n*n*(1+n*n*(L*n*n)+1)` at the selected layer budget L; the
+independent mathematical existence proof above gives the smaller stated bound.
 
 ## Conventions and dependencies
 
@@ -346,9 +364,20 @@ models, canonical fraction reduction, zero coordinates, and boundary dimensions.
 Eleven bounded-interpreter checks exercise zero clocks, nontermination,
 truncated output, all three source halt conditions, arbitrary logical inputs,
 virtual wraparound at two host widths, and binary-size-dependent clocks.
+Short-path component checks compare the complete emitted layered LP with
+its typed specification, including zero dimensions and multiple layers;
+check exact incident-capacity maxima and first-success selection with the
+full-length fallback; and traverse positive layered paths while erasing
+cycles and waiting steps from their physical projections. Complete extraction
+checks verify exact certificate output, both ordered commodities, zero flow,
+waiting-step removal, and multiple bottleneck records for one commodity. Larger checks use
+a sparse memory cache while retaining the registered instruction effects;
+a separate suite compares cached and original execution across instruction
+constructors and wrapping word widths. Selected suites can be run with
+`bash scripts/check-ram.sh LayeredLp IncidentMaximum ShortSelection PositivePath CachedMemory ShortExtraction`.
 Every check gives its physical input
 and expected output as an executable assertion in `checks/`; the single script
-above runs all 37 suites. The harness compiles each native command to the
+above runs all 43 suites. The harness compiles each native command to the
 registered word RAM and checks termination within its stated fuel.
 
 Build artifacts use the existing shared mathlib and RAM dependencies.
