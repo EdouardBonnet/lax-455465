@@ -1,4 +1,4 @@
-This submission concerns the deterministic algorithms behind the
+This submission formalizes deterministic algorithms for the
 multicommodity flow–cut theorems of Leighton and Rao. The general statement
 allows rational product demands, zero-weight transit vertices, and directed
 or undirected capacities. One deterministic algorithm runs in time polynomial
