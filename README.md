@@ -202,9 +202,21 @@ operations then derive the seed, radius budget, slope, and grid step from
 this support, total weight, and existing metric cost. Their execution and
 intermediate coordinate-height bounds are proved.
 
-The ordinary algorithm still needs malformed-input guards, the remaining
-native region loop and cut rounding, their resource bounds, and final
-composition. The separate short-path construction is open.
+A complete native residual iteration now recomputes the current graph,
+finds its first positive root, searches the root’s candidate radii, and
+executes the large-ball or small-ball branch. Its execution theorem connects
+all those operations to the mathematical region-loop expressions. A small
+step appends the actual root, canonical radius, and orientation to a runtime
+history and removes precisely its selected ball, preserving earlier records
+and original graph data. A fixed bounded loop composes these iterations;
+compiled checks exercise both large-ball termination and exhaustion through
+small balls. The typed loop invariant and support-decrease proofs bound every
+iteration and show that the final state cannot still be running. Connecting
+the final state to the cut-rounding output and assembling the global
+polynomial resource bounds remain open.
+
+The ordinary algorithm still needs malformed-input guards, final cut
+rounding, full resource bounds, and final composition. The separate short-path construction is open.
 
 ## Conventions and dependencies
 
