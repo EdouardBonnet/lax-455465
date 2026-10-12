@@ -3,7 +3,7 @@ import Lax455465.FlowCutCertificate
 /-!
 ---
 title: Deterministic directed uniform flow–cut algorithm
-type: theorem
+type: lemma
 ---
 A deterministic polynomial-time word RAM returns a cut and a rational
 uniform concurrent flow satisfying
